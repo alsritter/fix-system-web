@@ -1,38 +1,20 @@
 <template>
   <div id="app">
-    <nav></nav>
+    <Nav></Nav>
+    app
   </div>
 </template>
 
 <script>
-import nav from '@/components/admin/nav'
+import Nav from './components/admin/Nav.vue'
 export default {
-  name: 'app',
+  name: 'App',
   components: {
-    nav
+    Nav
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
 
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
 </style>
