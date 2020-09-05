@@ -21,6 +21,8 @@ elementUI已经导入，无需再次导入，直接复制粘贴代码即可
 
 然后到`App.vue`组件里面导入，注册，使用即可
 
+[![wZ981I.jpg](https://s1.ax1x.com/2020/09/05/wZ981I.jpg)](https://imgchr.com/i/wZ981I)
+
 1. 导入组件，路径要检查正确
 2. 注册组件
 3. 在html区使用，名字即为你组件的名字
