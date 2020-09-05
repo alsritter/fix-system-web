@@ -3,35 +3,62 @@
 #### 介绍
 前端远程库
 
-#### 软件架构
-软件架构说明
+# 使用规范
+
+我已配置好环境，需要先拉取我的代码
+
+具体拉取方式参考我的文档
+
+之后请各自在自己的分支上进行开发
+
+# 使用方式
+
+elementUI已经导入，无需再次导入，直接复制粘贴代码即可
+
+比如这里，是我的自己的Nav组件，复制了代码
+
+[![wVv4VH.jpg](https://s1.ax1x.com/2020/09/05/wVv4VH.jpg)](https://imgchr.com/i/wVv4VH)
+
+然后到`App.vue`组件里面导入，注册，使用即可
+
+1. 导入组件，路径要检查正确
+2. 注册组件
+3. 在html区使用，名字即为你组件的名字
+
+# 使用上的细节
+
+### 使用for循环
+
+在循环的时候，要绑定index
+
+```html
+<ul>
+   <li v-for="user in users" :key="user">{{user}}</li>
+</ul>
+```
 
 
-#### 安装教程
 
-1.  test
-2.  xxxx
-3.  xxxx
+## 导入组件和使用组件
 
-#### 使用说明
+把写好的组件导入，注册即可
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+```js
+import nav from './components/admin/nav'
+export default {
+  name: 'App',
+  components: {
+    nav
+  }
+}
+```
 
-#### 参与贡献
+## 组件命名问题
 
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
+对于组件名字，一定要大写!!!
 
+`Components.vue`
 
-#### 码云特技
+一定要！！！！
 
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  码云官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解码云上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是码云最有价值开源项目，是码云综合评定出的优秀开源项目
-5.  码云官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  码云封面人物是一档用来展示码云会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+# 
