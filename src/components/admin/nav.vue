@@ -1,39 +1,17 @@
 
 <template>
-    <div>
-      <el-col id="navi-menu" :span="12">
-    <h5>晚上好！管理员123</h5>
-    <el-menu
-      default-active="2"
-      class="el-menu-vertical-demo"
-      @open="handleOpen"
-      @close="handleClose">
-       <el-menu-item index="1" class="navi-child-item">
-        <i class="el-icon-menu" ></i>
-        <span slot="title">学生管理</span>
-      </el-menu-item>
-      <el-menu-item index="2" class="navi-child-item">
-        <i class="el-icon-menu"></i>
-        <span slot="title">工人管理</span>
-      </el-menu-item>
-      <el-menu-item index="3" class="navi-child-item">
-        <i class="el-icon-setting"></i>
-        <span slot="title">耗材管理</span>
-      </el-menu-item>
-      <el-menu-item index="4" class="navi-child-item">
-        <i class="el-icon-setting"></i>
-        <span slot="title">待处理的订单</span>
-      </el-menu-item>
-       <el-menu-item index="5" class="navi-child-item">
-        <i class="el-icon-setting"></i>
-        <span slot="title">进行中的订单</span>
-      </el-menu-item>
-       <el-menu-item index="6" class="navi-child-item">
-        <i class="el-icon-setting"></i>
-        <span slot="title">已完成的订单</span>
-      </el-menu-item>
-    </el-menu>
-  </el-col>
+    <div id="menu">
+     <ul>
+       <img src="C:\Users\86180\front_end_match_project\fix-system-web\src\assets\hua.jpg" alt="">
+       <li id="admin">管理员</li>
+       <li>用户管理</li>
+       <li>工人管理</li>
+       <li>耗材管理</li>
+       <li>进行中的订单</li>
+       <li>待处理的订单</li>
+       <li>已完成的订单</li>
+       <li>统计</li>
+     </ul>
     </div>
 </template>
 
@@ -50,8 +28,28 @@ export default {
    width: 100%;
    border: none;
  }
- .navi-child-item{
+ ul li{
    border: 10px;
-  background-color: #BBDED7;
+  color: white;
+  list-style-type: none;
+  margin-bottom: 70px;
+  margin-left: 20%;
  }
+ ul li:hover{
+   color: pink;
+   transform: translate(0px,-10px);
+   transition-duration: 0.5s;
+ }
+ #admin{
+   margin-left: 50%;
+   margin-top: 40%;
+ }
+ #menu ::after{
+   content:'';
+    display:block;
+    clear:both;
+ }
+ul >li{
+  border: 10px;
+}
 </style>
