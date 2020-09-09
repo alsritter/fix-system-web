@@ -12,7 +12,6 @@
           active-color="#ff80aa"
           background-color="#0000"
           unique-opened="true"
-          :router="true"
         >
           <el-submenu index="1">
             <template slot="title">
@@ -23,7 +22,7 @@
               <el-menu-item index="1-1" >
               <i class="el-icon-loading"></i>
               待处理的订单</el-menu-item>
-              <el-menu-item index="1-2" >
+              <el-menu-item index=" '/' + path " >
               <i class="el-icon-timer"></i>进行中的订单</el-menu-item>
               <el-menu-item index="1-3" >
               <i class="el-icon-document-checked"></i>已完成的订单</el-menu-item>
@@ -49,7 +48,9 @@
       </el-col>
     </el-aside>
     <el-main>
-      <router-view></router-view>
+    <div id="pink">
+    <router-view></router-view>
+    </div>
     </el-main>
   </el-container>
 </template>
@@ -66,6 +67,9 @@ export default {}
 .el-aside {
   background-image: linear-gradient(40deg, #8ac6d1, #bbded7);
 }
+.el-col-12{
+  width: 100%;
+}
 
 .el-menu {
   border-right: none;
@@ -73,5 +77,14 @@ export default {}
 h5 {
   color: white;
 }
+#pink{
+  background-color: pink;
+  height: 100%;
+  width: 100%;
+  padding: 0px;
+}
+.el-main{
+  padding: 0px;
+}
 </style>
-TODO:下拉框小图标去掉，更换栏目图标
+TODO:黑马从178看到187，做完每个页面的跳转
