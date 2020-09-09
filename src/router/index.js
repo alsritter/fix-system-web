@@ -4,7 +4,7 @@ import AdHome from '@/components/admin/AdHome'
 // import Imployee from '@/components/admin/Imployee'
 import Info from '@/components/admin/Info'
 import Login from '@/components/admin/Login'
-// import Mission from '@/components/admin/Mission'
+import Mission from '@/components/admin/Mission'
 // import SelfCenter from '@/components/admin/SelfCenter'
 // import Statistics from '@/components/admin/Statistics'
 // import Student from '@/components/admin/Student'
@@ -31,19 +31,33 @@ Vue.use(VueRouter)
 const routes = [
   {
     // 用AdHome组件承载管理员其余的全部组件
- path: '/admin',
-  component: AdHome,
-  redirect: '/Login',
-  children: [{
-    path: '/Info',
-    component: Info
-  }, {
+    path: '/admin',
+    component: AdHome,
+    redirect: '/Login',
+    children: [{
+        path: '/Info',
+        component: Info
+      }, {
+        path: '/Mission',
+        component: Mission
+      }
+    ]
+
+ }, // 提取出作为单独的页面
+  {
     path: '/Login',
     component: Login
-  }]
-
- }]
+  }
+]
 const router = new VueRouter({
   routes: routes
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.path === '/Login') return next()
+  // 获取token
+  const tokenStr = window.localStorage.getItem('token')
+  if (!tokenStr) return next('/Login')
+  next()
 })
 export default router

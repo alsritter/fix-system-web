@@ -28,8 +28,8 @@
           <el-button @click="resetLoginForm">重置</el-button>
           <el-button type="success">注册</el-button>
           <el-button type="info" @click="getUtils">获取验证码</el-button>
+          <img :src="imageURL" id="count" @click="getUtils" />
         </el-form-item>
-        <img :src="filePath" alt="">
       </el-form>
     </div>
   </div>
@@ -40,48 +40,66 @@ export default {
   data() {
     return {
       loginForm: {
-        username: '',
-        password: '',
-        Ucode: '',
-        filePath: ''
+        username: '201825070129',
+        password: '1234567890',
+        Ucode: ''
       },
       loginFormRules: {
         username: [
-          { required: true, message: '请输入活动名称', trigger: 'blur' },
-          { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+          { required: true, message: '不要空着噢', trigger: 'blur' },
+          { min: 1, max: 20, message: '长度在 3 到 5 个字符', trigger: 'blur' }
         ],
         password: [
-          { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
-        ]
-      }
+          { min: 1, max: 10, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+        ],
+        Ucode: [{ required: true, message: '不要空着噢', trigger: 'blur' }]
+      },
+      imageURL: ''
     }
   },
   methods: {
     resetLoginForm() {
       this.$refs.loginFormRef.resetFields()
     },
+    // 登录验证
     loginValidate() {
+      const that = this
+
       this.$refs.loginFormRef.validate(async (validate) => {
-        if (validate) return
-        const { data: res } = await this.$http.post(
-          'student/login',
-          this.loginForm
-        )
-        if (res.meta !== 200) return this.$message.error('登录失败')
-        this.$message.success('登录成功')
-        window.localStorage.setItem('token', res.token)
+        const uid = sessionStorage.getItem('uuid')
+        // const that = this
+        if (!validate) return // 发起axios请求
+
+        await that.$http
+          .post('student/login', {
+            studentId: that.loginForm.username, // 表单参数 3个
+            password: that.loginForm.password,
+            codevalue: that.loginForm.Ucode,
+            uuid: uid // 时间戳参数
+          })
+          .then((res) => {
+            console.log(res) // 要运行到这里
+            if (res.data.code !== 200) return that.$message.error('登录失败')
+            that.$message.success('登录成功')
+            window.localStorage.setItem('token', res.data.data.token)
+          })
       })
     },
     getUtils() {
       const that = this
       const uuid = new Date().getTime()
+      sessionStorage.setItem('uuid', uuid)
       async function getCode() {
-        const res1 = await that.$http.get('utils/code', {
-          params: {
-            uuid: uuid
-          }
-        })
-        this.filePath = 'data:image/jpeg;base64,' + res1
+        await that.$http
+          .get('utils/code', {
+            params: {
+              uuid: uuid
+            },
+            responseType: 'blob'
+          })
+          .then((response) => {
+            that.imageURL = window.webkitURL.createObjectURL(response.data)
+          })
       }
       getCode()
     }
@@ -92,12 +110,13 @@ export default {
 <style>
 .btns {
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
 }
 .login-form {
   position: absolute;
   width: 40%;
 }
+#count{
+  margin-left: 10px;
+}
 </style>
-TODO:获取到登录后的数据
-TODO2:获得正确的账号密码，想办法使axios请求生效
