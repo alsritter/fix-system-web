@@ -9,21 +9,41 @@
 
 具体拉取方式参考我的文档
 
-# 使用方式
+之后请各自在自己的分支上进行开发
 
-请先在自己的分支进行开发，再进行合并
+# 使用方式
 
 elementUI已经导入，无需再次导入，直接复制粘贴代码即可
 
+下面讲组件的注册和使用
+
 比如这里，是我的自己的Nav组件，复制了代码
 
-[![wVv4VH.jpg](https://s1.ax1x.com/2020/09/05/wVv4VH.jpg)](https://imgchr.com/i/wVv4VH)
+![weJm3d.jpg](https://s1.ax1x.com/2020/09/06/weJm3d.jpg)
 
-然后到`App.vue`组件里面导入，注册，使用即可
+然后到`index.js`组件里面注册
 
-1. 导入组件，路径要检查正确
-2. 注册组件
-3. 在html区使用，名字即为你组件的名字
+先导入该组件
+
+```js
+import Temp from '@/components/admin/Temp'
+```
+
+[![weGrpd.jpg](https://s1.ax1x.com/2020/09/06/weGrpd.jpg)](https://imgchr.com/i/weGrpd)
+
+这个routes变量存储我们所有的组件注册
+
+```js
+components: Temp
+```
+
+如果有嵌套组件，则需要使用嵌套路由
+
+```js
+component: Temp ,children: [
+        {path: '/admin',component: tab1}
+    ]
+```
 
 # 使用上的细节
 
@@ -61,3 +81,4 @@ export default {
 
 一定要！！！！
 
+# 

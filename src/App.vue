@@ -1,20 +1,15 @@
 <template>
   <div id="app">
-    <Nav></Nav>
-    app
+      <router-view></router-view>
   </div>
 </template>
 
 <script>
-import Nav from './components/admin/Nav'
 export default {
-  name: 'App',
-  components: {
-    Nav
-  }
+  name: 'app',
+  components: {}
 }
 </script>
 
 <style>
-
 </style>
