@@ -3,10 +3,14 @@ import App from './App.vue'
 import router from './router'
 import './plugins/element'
 import axios from 'axios'
-import './assets/css/global.css'
 import 'element-ui/lib/theme-chalk/index.css'
+import './assets/css/global.css'
 import ElementUI from 'element-ui'
+// 引入阿里图标库
+import './assets/css/iconfont.css'
+
 import qs from 'qs'
+// 配置 axios 的 Post 方法，使之每次发送请求时默认是通过 'application/x-www-form-urlencoded' 来发送（这个就是传统表单的发送方式）
 axios.interceptors.request.use((config) => {
     if (config.method === 'post') {
         config.data = qs.stringify(config.data)

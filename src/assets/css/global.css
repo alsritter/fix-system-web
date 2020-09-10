@@ -1,7 +1,16 @@
-html,body,#app {
+html, body, #app {
     height: 100%;
     width: 100%;
     margin: 0;
     padding: 0;
     min-width: 100%;
+}
+
+/* 登陆页的输入框样式 */
+.student-login .el-input__inner {
+    height: 60px;
+    background-color: #ffffff33 !important;
+    border: 1px solid #dcdfe600;
+    /* 字体颜色 */
+    color: #fff;
 }
