@@ -4,7 +4,7 @@ import VueRouter from 'vue-router'
 import AdminLogin from '@/components/admin/Login'
 import AdHome from '@/components/admin/AdHome'
 import Info from '@/components/admin/Info'
-import Imployee from '@/components/admin/Imployee'
+import WorkerManage from '@/components/admin/WorkerManage'
 import Order from '../components/admin/Order.vue'
 import SelfCenter from '@/components/admin/SelfCenter'
 import Statistics from '@/components/admin/Statistics'
@@ -12,6 +12,7 @@ import Student from '@/components/admin/Student'
 import Tools from '@/components/admin/Tools'
 import OrderInProgress from '../components/admin/OrderInProgress.vue'
 import Announcement from '../components/admin/Announcement.vue'
+import OrderFinished from '../components/admin/OrderFinished.vue'
 // 学生页面
 import StudentLogin from '@/components/student/StudentLogin'
 import StudentHome from '@/components/student/StudentHome'
@@ -34,17 +35,13 @@ const routes = [
         component: Order
       }, {
         path: '/OrderFinished',
-        component: Imployee
+        component: OrderFinished
       }, {
         path: '/OrderInProgress',
         component: OrderInProgress
       }, {
-        path: '/Imployee',
-        component: Imployee,
-        children: [{
-            path: '/ImployeeDetail',
-            component: Imployee
-        }]
+        path: '/WorkerManage',
+        component: WorkerManage
       }, {
         path: '/SelfCenter',
         component: SelfCenter
