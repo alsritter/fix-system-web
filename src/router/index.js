@@ -1,14 +1,16 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import AdHome from '@/components/admin/AdHome'
-// import Imployee from '@/components/admin/Imployee'
+import Imployee from '@/components/admin/Imployee'
 import Info from '@/components/admin/Info'
 import Login from '@/components/admin/Login'
-import Mission from '@/components/admin/Mission'
-// import SelfCenter from '@/components/admin/SelfCenter'
-// import Statistics from '@/components/admin/Statistics'
-// import Student from '@/components/admin/Student'
-// import Tools from '@/components/admin/Tools'
+import Order from '../components/admin/Order.vue'
+import SelfCenter from '@/components/admin/SelfCenter'
+import Statistics from '@/components/admin/Statistics'
+import Student from '@/components/admin/Student'
+import Tools from '@/components/admin/Tools'
+import OrderInProgress from '../components/admin/OrderInProgress.vue'
+import Announcement from '../components/admin/Announcement.vue'
 // import History from '@/components/worker/History'
 // import Home from '@/components/worker/Home'
 // import WorkerLogin from '@/components/worker/WorkerLogin'
@@ -30,7 +32,7 @@ import Mission from '@/components/admin/Mission'
 Vue.use(VueRouter)
 const routes = [
   {
-    // 用AdHome组件承载管理员其余的全部组件
+    // 管理员路由注册
     path: '/admin',
     component: AdHome,
     redirect: '/Login',
@@ -38,8 +40,36 @@ const routes = [
         path: '/Info',
         component: Info
       }, {
-        path: '/Mission',
-        component: Mission
+        path: '/Order',
+        component: Order
+      }, {
+        path: '/OrderFinished',
+        component: Imployee
+      }, {
+        path: '/OrderInProgress',
+        component: OrderInProgress
+      }, {
+        path: '/Imployee',
+        component: Imployee,
+        children: [{
+            path: '/ImployeeDetail',
+            component: Imployee
+        }]
+      }, {
+        path: '/SelfCenter',
+        component: SelfCenter
+      }, {
+        path: '/Statistics',
+        component: Statistics
+      }, {
+        path: '/Student',
+        component: Student
+      }, {
+        path: '/Tools',
+        component: Tools
+      }, {
+        path: '/Announcement',
+        component: Announcement
       }
     ]
 
@@ -61,3 +91,4 @@ router.beforeEach((to, from, next) => {
   next()
 })
 export default router
+// TODO:等待学生端实现，合并分支后需要调整路由注册规则

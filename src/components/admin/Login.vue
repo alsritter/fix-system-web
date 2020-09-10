@@ -13,20 +13,22 @@
         ref="loginFormRef"
       >
         <!--输入框-->
-        <el-form-item label="用户名" prop="username">
-          <el-input prefix-icon="el-icon-user" v-model="loginForm.username"></el-input>
+        <el-form-item label="工号" prop="userID">
+          <el-input prefix-icon="el-icon-user" v-model="loginForm.userID"
+          @keyup.enter.native="loginValidate"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
-          <el-input prefix-icon="el-icon-lock" type="password" v-model="loginForm.password"></el-input>
+          <el-input prefix-icon="el-icon-lock" type="password"
+          v-model="loginForm.password" @keyup.enter.native="loginValidate"></el-input>
         </el-form-item>
         <el-form-item label="验证码" prop="Ucode">
-          <el-input prefix-icon="el-icon-lock" v-model="loginForm.Ucode"></el-input>
+          <el-input prefix-icon="el-icon-lock" v-model="loginForm.Ucode"
+          @keyup.enter.native="loginValidate"></el-input>
         </el-form-item>
         <!--按钮-->
         <el-form-item class="btns">
           <el-button type="primary" @click="loginValidate">登录</el-button>
           <el-button @click="resetLoginForm">重置</el-button>
-          <el-button type="success">注册</el-button>
           <el-button type="info" @click="getUtils">获取验证码</el-button>
           <img :src="imageURL" id="count" @click="getUtils" />
         </el-form-item>
@@ -40,8 +42,8 @@ export default {
   data() {
     return {
       loginForm: {
-        username: '201825070129',
-        password: '1234567890',
+        userID: '201835070344',
+        password: '12342121',
         Ucode: ''
       },
       loginFormRules: {
@@ -71,17 +73,23 @@ export default {
         if (!validate) return // 发起axios请求
 
         await that.$http
-          .post('student/login', {
-            studentId: that.loginForm.username, // 表单参数 3个
+          .post('admin/login', {
+            workId: that.loginForm.userID, // 表单参数 3个
             password: that.loginForm.password,
             codevalue: that.loginForm.Ucode,
             uuid: uid // 时间戳参数
           })
           .then((res) => {
-            console.log(res) // 要运行到这里
+            console.log(res.data.code)
+            console.log(res.data.message)
+            console.log(that.loginForm.userID)
+            console.log(that.loginForm.password)
+            console.log(that.loginForm.Ucode)
+            console.log(uid)
             if (res.data.code !== 200) return that.$message.error('登录失败')
             that.$message.success('登录成功')
             window.localStorage.setItem('token', res.data.data.token)
+            this.$router.push('/SelfCenter')
           })
       })
     },
