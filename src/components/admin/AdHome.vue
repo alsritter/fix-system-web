@@ -6,12 +6,9 @@
         <h3 @click="toSelfCenter">管理员</h3>
         <el-menu
           default-active="2"
-          @open="handleOpen"
-          @close="handleClose"
           text-color="#ffffff"
           active-color="#ff80aa"
           background-color="#0000"
-          unique-opened="true"
           router
         >
           <el-submenu index="1">
@@ -33,9 +30,9 @@
             <i class="el-icon-user-solid"></i>
             <span slot="title" id="sub5" @click="toStudent">学生管理</span>
           </el-menu-item>
-          <el-menu-item index="/Imployee">
+          <el-menu-item index="/WorkerManage">
             <i class="el-icon-s-custom"></i>
-            <span slot="title" id="sub5" @click="toImployee">工人管理</span>
+            <span slot="title" id="sub5" @click="toWorkerManage">工人管理</span>
           </el-menu-item>
             <el-menu-item index="/Tools">
             <i class="el-icon-setting"></i>
@@ -77,8 +74,8 @@ export default {
     toInfo() {
       this.$router.push('/Info')
     },
-    toImployee() {
-      this.$router.push('/Imployee')
+    toWorkerManage() {
+      this.$router.push('/WorkerManage')
     },
     toSelfCenter() {
       this.$router.push('/SelfCenter')
