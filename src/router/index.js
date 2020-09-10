@@ -91,4 +91,4 @@ router.beforeEach((to, from, next) => {
   next()
 })
 export default router
-// TODO:修改路由注册排布，使其适合多个终端的需求
+// TODO:等待学生端实现，合并分支后需要调整路由注册规则
