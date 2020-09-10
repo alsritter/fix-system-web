@@ -1,7 +1,6 @@
 <template>
     <div>
-    <p id="info">个人中心</p>
-    <p>欢迎回来</p>
+    <p id="info">消息中心</p>
     </div>
 </template>
 

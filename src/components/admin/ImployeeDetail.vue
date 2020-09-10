@@ -1,5 +1,6 @@
 <template>
     <div>
+        <p id="p">工人详情页</p>
     </div>
 </template>
 
@@ -11,4 +12,7 @@
 </script>
 
 <style scoped>
+#p {
+    margin-top: 0;
+}
 </style>

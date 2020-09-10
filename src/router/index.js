@@ -3,8 +3,15 @@ import VueRouter from 'vue-router'
 // 管理员页面
 import AdminLogin from '@/components/admin/Login'
 import AdHome from '@/components/admin/AdHome'
-import Mission from '@/components/admin/Mission'
 import Info from '@/components/admin/Info'
+import Imployee from '@/components/admin/Imployee'
+import Order from '../components/admin/Order.vue'
+import SelfCenter from '@/components/admin/SelfCenter'
+import Statistics from '@/components/admin/Statistics'
+import Student from '@/components/admin/Student'
+import Tools from '@/components/admin/Tools'
+import OrderInProgress from '../components/admin/OrderInProgress.vue'
+import Announcement from '../components/admin/Announcement.vue'
 // 学生页面
 import StudentLogin from '@/components/student/StudentLogin'
 import StudentHome from '@/components/student/StudentHome'
@@ -14,6 +21,7 @@ const routes = [
   { path: '/admin/Login', component: AdminLogin },
   { path: '/student/Login', component: StudentLogin },
   {
+    // 管理员路由注册
     path: '/admin',
     component: AdHome,
     redirect: '/admin/Login',
@@ -22,8 +30,36 @@ const routes = [
         path: '/Info',
         component: Info
       }, {
-        path: '/Mission',
-        component: Mission
+        path: '/Order',
+        component: Order
+      }, {
+        path: '/OrderFinished',
+        component: Imployee
+      }, {
+        path: '/OrderInProgress',
+        component: OrderInProgress
+      }, {
+        path: '/Imployee',
+        component: Imployee,
+        children: [{
+            path: '/ImployeeDetail',
+            component: Imployee
+        }]
+      }, {
+        path: '/SelfCenter',
+        component: SelfCenter
+      }, {
+        path: '/Statistics',
+        component: Statistics
+      }, {
+        path: '/Student',
+        component: Student
+      }, {
+        path: '/Tools',
+        component: Tools
+      }, {
+        path: '/Announcement',
+        component: Announcement
       }
     ]
   },
@@ -54,3 +90,4 @@ router.beforeEach((to, from, next) => {
   next()
 })
 export default router
+// TODO:等待学生端实现，合并分支后需要调整路由注册规则
