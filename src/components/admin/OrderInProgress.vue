@@ -1,6 +1,6 @@
 <template>
     <div>
-        <p id="p">统计</p>
+        <p id="p">进行中的订单</p>
     </div>
 </template>
 

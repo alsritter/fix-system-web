@@ -16,10 +16,15 @@ axios.interceptors.request.use((config) => {
 }, (error) => {
     return Promise.reject(error)
 })
-
+// vue相关配置
 Vue.use(ElementUI)
 Vue.config.productionTip = false
+// axios相关配置
 axios.defaults.baseURL = 'http://47.103.192.147:8080/'
+axios.interceptors.request.use(config => {
+    config.headers.Authorization = window.localStorage.getItem('token')
+    return config
+})
 Vue.prototype.$http = axios
 new Vue({
   router,
