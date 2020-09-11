@@ -7,7 +7,7 @@
 <script>
     export default {
         components: {
-            // 这里俺修改了hhh hsaiudhkahdkahj
+            // 这里我修改了hhh
         }
     }
 </script>
