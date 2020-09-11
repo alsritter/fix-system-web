@@ -6,7 +6,7 @@
 <script>
     export default {
         components: {
-
+            // 消息中心
         }
     }
 </script>

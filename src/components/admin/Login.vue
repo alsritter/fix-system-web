@@ -30,7 +30,7 @@
           <el-button type="primary" @click="loginValidate">登录</el-button>
           <el-button @click="resetLoginForm">重置</el-button>
           <el-button type="info" @click="getUtils">获取验证码</el-button>
-          <img :src="imageURL" id="count" @click="getUtils" />
+          <el-image :src='imageURL'  id="count" @click="getUtils" ></el-image>
         </el-form-item>
       </el-form>
     </div>

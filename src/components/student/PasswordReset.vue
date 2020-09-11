@@ -6,7 +6,7 @@
 <script>
     export default {
         components: {
-
+            // 重置密码
         }
     }
 </script>

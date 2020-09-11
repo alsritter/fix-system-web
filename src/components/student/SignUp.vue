@@ -6,7 +6,7 @@
 <script>
     export default {
         components: {
-
+            // 注册
         }
     }
 </script>

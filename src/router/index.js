@@ -1,9 +1,10 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+// 管理员页面
+import AdminLogin from '@/components/admin/Login'
 import AdHome from '@/components/admin/AdHome'
-import Imployee from '@/components/admin/Imployee'
 import Info from '@/components/admin/Info'
-import Login from '@/components/admin/Login'
+import WorkerManage from '@/components/admin/WorkerManage'
 import Order from '../components/admin/Order.vue'
 import SelfCenter from '@/components/admin/SelfCenter'
 import Statistics from '@/components/admin/Statistics'
@@ -13,32 +14,21 @@ import OrderInProgress from '../components/admin/OrderInProgress.vue'
 import Announcement from '../components/admin/Announcement.vue'
 import OrderFinished from '../components/admin/OrderFinished.vue'
 import OrderDetails from '../components/admin/OrderDetails.vue'
-// import History from '@/components/worker/History'
-// import Home from '@/components/worker/Home'
-// import WorkerLogin from '@/components/worker/WorkerLogin'
-// import WorkerInfo from '@/components/worker/WorkerInfo'
-// import MissonInProgress from '@/components/worker/MissonInProgress'
-// import OrderDetail from '@/components/worker/OrderDetail'
-// import Register from '@/components/worker/Register'
-// import Result from '@/components/worker/Result'
-// import Unhandle from '@/components/worker/Unhandle'
-// import CallUp from '@/components/student/CallUp'
-// import Details from '@/components/student/Details'
-// import StudentHome from '@/components/student/StudentHome'
-// import InfoCenter from '@/components/student/InfoCenter'
-// import StudentLogin from '@/components/student/StudentLogin'
-// import SignUp from '@/components/student/SignUp'
-// import PasswordReset from '@/components/student/PasswordReset'
-// import MyOrder from '@/components/student/MyOrder'
+// 学生页面
+import StudentLogin from '@/components/student/StudentLogin'
+import StudentHome from '@/components/student/StudentHome'
 
 Vue.use(VueRouter)
 const routes = [
+  { path: '/admin/Login', component: AdminLogin },
+  { path: '/student/Login', component: StudentLogin },
   {
     // 管理员路由注册
     path: '/admin',
     component: AdHome,
-    redirect: '/Login',
-    children: [{
+    redirect: '/admin/Login',
+    children: [
+      {
         path: '/Info',
         component: Info
       }, {
@@ -54,11 +44,8 @@ const routes = [
         path: '/OrderInProgress',
         component: OrderInProgress
       }, {
-        path: '/Imployee',
-        component: Imployee
-      }, {
-        path: '/ImployeeDetail',
-        component: Imployee
+        path: '/WorkerManage',
+        component: WorkerManage
       }, {
         path: '/SelfCenter',
         component: SelfCenter
@@ -76,11 +63,12 @@ const routes = [
         component: Announcement
       }
     ]
-
- }, // 提取出作为单独的页面
+  },
   {
-    path: '/Login',
-    component: Login
+    path: '/student',
+    component: StudentHome,
+    redirect: '/student/Login',
+    children: []
   }
 ]
 const router = new VueRouter({
@@ -88,10 +76,18 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if (to.path === '/Login') return next()
+  // 几个特殊的路由运行通过就好了
+  if (to.path === '/admin/Login') return next()
+  if (to.path === '/student/Login') return next()
+
+  // 先截取路径前缀（动态获取根路径）
+  const pathStr = to.path.substring(1, to.path.substr(1).indexOf('/') + 1)
+
+  console.log('根路径为：' + pathStr)
+
   // 获取token
   const tokenStr = window.localStorage.getItem('token')
-  if (!tokenStr) return next('/Login')
+  if (!tokenStr) return next(`/${pathStr}/Login`)
   next()
 })
 export default router

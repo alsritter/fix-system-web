@@ -1,14 +1,13 @@
 <template>
-    <div>
-    </div>
+  <div></div>
 </template>
 
 <script>
-    export default {
-        components: {
-
-        }
-    }
+export default {
+  components: {
+    // 我的订单
+  }
+}
 </script>
 
 <style scoped>
