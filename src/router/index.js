@@ -11,6 +11,8 @@ import Student from '@/components/admin/Student'
 import Tools from '@/components/admin/Tools'
 import OrderInProgress from '../components/admin/OrderInProgress.vue'
 import Announcement from '../components/admin/Announcement.vue'
+import OrderFinished from '../components/admin/OrderFinished.vue'
+import OrderDetails from '../components/admin/OrderDetails.vue'
 // import History from '@/components/worker/History'
 // import Home from '@/components/worker/Home'
 // import WorkerLogin from '@/components/worker/WorkerLogin'
@@ -43,18 +45,20 @@ const routes = [
         path: '/Order',
         component: Order
       }, {
+        path: '/OrderDetails',
+        component: OrderDetails
+      }, {
         path: '/OrderFinished',
-        component: Imployee
+        component: OrderFinished
       }, {
         path: '/OrderInProgress',
         component: OrderInProgress
       }, {
         path: '/Imployee',
-        component: Imployee,
-        children: [{
-            path: '/ImployeeDetail',
-            component: Imployee
-        }]
+        component: Imployee
+      }, {
+        path: '/ImployeeDetail',
+        component: Imployee
       }, {
         path: '/SelfCenter',
         component: SelfCenter

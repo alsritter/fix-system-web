@@ -6,12 +6,9 @@
         <h3 @click="toSelfCenter">管理员</h3>
         <el-menu
           default-active="2"
-          @open="handleOpen"
-          @close="handleClose"
           text-color="#ffffff"
           active-color="#ff80aa"
           background-color="#0000"
-          unique-opened="true"
           router
         >
           <el-submenu index="1">
@@ -61,7 +58,9 @@
     </el-aside>
     <el-main>
     <div id="pink">
-    <router-view></router-view>
+      <div id="begies">
+        <router-view></router-view>
+        </div>
     </div>
     </el-main>
   </el-container>
@@ -131,6 +130,13 @@ h3 {
   height: 100%;
   width: 100%;
   padding: 0px;
+}
+#begies{
+      width: 90%;
+    height: 90%;
+    background-color: beige;
+     display: block;
+    margin: 0 auto;
 }
 .el-main{
   padding: 0px;

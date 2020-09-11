@@ -1,13 +1,14 @@
 <template>
     <div>
-    <p id="info">消息中心</p>
+    <div>
+
+  </div>
     </div>
 </template>
 
 <script>
     export default {
-        components: {
-        }
+
     }
 </script>
 

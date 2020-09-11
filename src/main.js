@@ -25,6 +25,7 @@ axios.interceptors.request.use(config => {
     config.headers.Authorization = window.localStorage.getItem('token')
     return config
 })
+Vue.prototype.$value = new Vue()
 Vue.prototype.$http = axios
 new Vue({
   router,
