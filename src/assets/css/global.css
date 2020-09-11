@@ -14,3 +14,10 @@ html, body, #app {
     /* 字体颜色 */
     color: #fff;
 }
+/* 学生登陆页的错误提示 */
+.login_box .el-form-item__error {
+    color: #d60d0d;
+    font-size: 10px;
+    padding-top: 0;
+    font-size: 5px;
+}
