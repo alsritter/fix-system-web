@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import axios from 'axios'
 // 根页面，用来选择是哪种用户
 import Root from '../components/Root.vue'
 // 管理员页面
@@ -12,10 +13,7 @@ import SelfCenter from '@/components/admin/SelfCenter'
 import Statistics from '@/components/admin/Statistics'
 import Student from '@/components/admin/Student'
 import Tools from '@/components/admin/Tools'
-import OrderInProgress from '../components/admin/OrderInProgress.vue'
 import Announcement from '../components/admin/Announcement.vue'
-import OrderFinished from '../components/admin/OrderFinished.vue'
-import OrderDetails from '../components/admin/OrderDetails.vue'
 // 学生页面
 import StudentLogin from '@/components/student/StudentLogin'
 import StudentSignUp from '../components/student/SignUp.vue'
@@ -24,9 +22,9 @@ import StudentHome from '@/components/student/StudentHome'
 Vue.use(VueRouter)
 const routes = [
   { path: '/', component: Root },
-  { path: '/admin/Login', component: AdminLogin },
   { path: '/student/Login', component: StudentLogin },
   { path: '/student/signUp', component: StudentSignUp },
+  { path: '/admin/Login', component: AdminLogin },
   {
     // 管理员路由注册
     path: '/admin',
@@ -39,15 +37,6 @@ const routes = [
       }, {
         path: 'Order',
         component: Order
-      }, {
-        path: 'OrderDetails',
-        component: OrderDetails
-      }, {
-        path: 'OrderFinished',
-        component: OrderFinished
-      }, {
-        path: 'OrderInProgress',
-        component: OrderInProgress
       }, {
         path: 'WorkerManage',
         component: WorkerManage
@@ -96,6 +85,10 @@ router.beforeEach((to, from, next) => {
   // const tokenStr = window.localStorage.getItem('token')
   // if (!tokenStr) return next(`/${pathStr}/Login`)
   // next()
+})
+axios.interceptors.request.use(config => {
+  config.headers.Authorization = window.localStorage.getItem('admin-token')
+  return config
 })
 export default router
 // TODO:等待学生端实现，合并分支后需要调整路由注册规则

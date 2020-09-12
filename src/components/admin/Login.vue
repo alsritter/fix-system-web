@@ -127,6 +127,7 @@ export default {
             that.$message.success('登录成功')
             window.localStorage.setItem('admin-token', res.data.data.token)
             this.$router.push('SelfCenter')
+            sessionStorage.clear()
           })
           .catch((error) => {
             if (error.response.data.message === 'image code error') {
