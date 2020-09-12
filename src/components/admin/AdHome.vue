@@ -26,27 +26,27 @@
               <i class="el-icon-document-checked"></i>已完成的订单</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
-           <el-menu-item index="/Student">
+           <el-menu-item index="Student">
             <i class="el-icon-user-solid"></i>
             <span slot="title" id="sub5" @click="toStudent">学生管理</span>
           </el-menu-item>
-          <el-menu-item index="/WorkerManage">
+          <el-menu-item index="WorkerManage">
             <i class="el-icon-s-custom"></i>
             <span slot="title" id="sub5" @click="toWorkerManage">工人管理</span>
           </el-menu-item>
-            <el-menu-item index="/Tools">
+            <el-menu-item index="Tools">
             <i class="el-icon-setting"></i>
             <span slot="title" id="sub6" @click="toTools">耗材管理</span>
           </el-menu-item>
-            <el-menu-item index="/Statistics">
+            <el-menu-item index="Statistics">
             <i class="el-icon-data-analysis"></i>
             <span slot="title" id="sub7" @click="toStatistics">统计</span>
           </el-menu-item>
-           <el-menu-item index="/Info">
+           <el-menu-item index="Info">
             <i class="el-icon-data-analysis"></i>
             <span slot="title" id="sub7" @click="toInfo">消息中心</span>
           </el-menu-item>
-           <el-menu-item index="/Announcement">
+           <el-menu-item index="Announcement">
             <i class="el-icon-data-analysis"></i>
             <span slot="title" id="sub7" @click="toAnnouncement">发布公告</span>
           </el-menu-item>
@@ -71,37 +71,38 @@ export default {
   methods: {
     signOut() {
       window.localStorage.clear()
-      this.$router.push('/Login')
+      this.$router.push('Login')
+      // FIXME: 你侧边栏已经有路由跳转了，就无需这里手动跳转了，且跳转子路由前面不需要加 /
     },
     toInfo() {
-      this.$router.push('/Info')
+      // this.$router.push('Info')
     },
     toWorkerManage() {
-      this.$router.push('/WorkerManage')
+      // this.$router.push('WorkerManage')
     },
     toSelfCenter() {
-      this.$router.push('/SelfCenter')
+      // this.$router.push('SelfCenter')
     },
     toStudent() {
-      this.$router.push('/Student')
+      // this.$router.push('Student')
     },
     toTools() {
-      this.$router.push('/Tools')
+      // this.$router.push('Tools')
     },
     toStatistics() {
-      this.$router.push('/Statistics')
+      // this.$router.push('Statistics')
     },
     toAnnouncement() {
-      this.$router.push('/Announcement')
+      // this.$router.push('Announcement')
     },
     toOrder() {
-      this.$router.push('/Order')
+      // this.$router.push('Order')
     },
     toOrderFinished() {
-      this.$router.push('/OrderFinished')
+      // this.$router.push('OrderFinished')
     },
     toOrderInProgress() {
-      this.$router.push('/OrderInProgress')
+      // this.$router.push('OrderInProgress')
     }
   }
 }

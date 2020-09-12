@@ -77,49 +77,6 @@ export default {
     }
   },
   methods: {
-    // 登录验证
-    loginValidate() {
-      const that = this
-      this.$refs.loginFormRef.validate(async validate => {
-        const uid = sessionStorage.getItem('uuid')
-        // const that = this
-
-        if (!validate) {
-          return that.$message.error('请把信息填写完整！')
-        }
-
-        // 发起axios请求
-        await that.$http
-          .post('student/login', {
-            studentId: that.loginForm.userID, // 表单参数 3个
-            password: that.loginForm.password,
-            codevalue: that.loginForm.Ucode,
-            uuid: uid // 时间戳参数
-          })
-          .then(res => {
-            that.$message.success('登录成功')
-            // 更换为笑脸
-            that.stateColor = 'rgb(129 228 100)'
-            that.headIcon = 'icon-xiaolian'
-
-            console.log(res.data)
-            window.localStorage.setItem('student-token', res.data.data.token)
-            // 等待 0.5 秒再进去
-            setTimeout(() => {
-              this.$router.push('/student')
-            }, 500)
-          })
-          .catch((error) => {
-            if (error.response.data.message === 'image code error') {
-              return that.$message.error('验证码错误')
-            }
-            // 更换为失败脸
-            that.headIcon = 'icon-kulian'
-            that.stateColor = 'rgb(224 93 93)'
-            return that.$message.error('登录失败')
-          })
-      })
-    },
     getUtils() {
       const uuid = new Date().getTime()
       sessionStorage.setItem('uuid', uuid)
@@ -137,7 +94,49 @@ export default {
           console.error(error)
           return this.$message.error('获取验证码错误')
         })
+    },
+    // 登录验证
+    loginValidate() {
+      const that = this
+      this.$refs.loginFormRef.validate(async validate => {
+        const uid = sessionStorage.getItem('uuid')
+        // const that = this
+
+        if (!validate) {
+          return this.$message.error('请把信息填写完整！')
+        }
+
+        // 发起axios请求
+        await that.$http
+          .post('student/login', {
+            studentId: that.loginForm.userID, // 表单参数 3个
+            password: that.loginForm.password,
+            codevalue: that.loginForm.Ucode,
+            uuid: uid // 时间戳参数
+          })
+          .then(res => {
+            that.$message.success('登录成功')
+            // 更换为笑脸
+            that.stateColor = 'rgb(129 228 100)'
+            that.headIcon = 'icon-xiaolian'
+            window.localStorage.setItem('student-token', res.data.data.token)
+            // 等待 0.5 秒再进去
+            setTimeout(() => {
+              this.$router.push('/student')
+            }, 500)
+          })
+          .catch((error) => {
+            if (error.response.data.message === 'image code error') {
+              return that.$message.error('验证码错误')
+            }
+            // 更换为失败脸
+            that.headIcon = 'icon-kulian'
+            that.stateColor = 'rgb(224 93 93)'
+            return that.$message.error('登录失败')
+          })
+      })
     }
+
   }
 }
 </script>

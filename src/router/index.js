@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+// 根页面，用来选择是哪种用户
+import Root from '../components/Root.vue'
 // 管理员页面
 import AdminLogin from '@/components/admin/Login'
 import AdHome from '@/components/admin/AdHome'
@@ -20,46 +22,47 @@ import StudentHome from '@/components/student/StudentHome'
 
 Vue.use(VueRouter)
 const routes = [
+  { path: '/', component: Root },
   { path: '/admin/Login', component: AdminLogin },
   { path: '/student/Login', component: StudentLogin },
   {
     // 管理员路由注册
     path: '/admin',
     component: AdHome,
-    redirect: '/admin/Login',
+    // 这里有个坑，就是子路由的地址前面不要写 /
     children: [
       {
-        path: '/Info',
+        path: 'Info',
         component: Info
       }, {
-        path: '/Order',
+        path: 'Order',
         component: Order
       }, {
-        path: '/OrderDetails',
+        path: 'OrderDetails',
         component: OrderDetails
       }, {
-        path: '/OrderFinished',
+        path: 'OrderFinished',
         component: OrderFinished
       }, {
-        path: '/OrderInProgress',
+        path: 'OrderInProgress',
         component: OrderInProgress
       }, {
-        path: '/WorkerManage',
+        path: 'WorkerManage',
         component: WorkerManage
       }, {
-        path: '/SelfCenter',
+        path: 'SelfCenter',
         component: SelfCenter
       }, {
-        path: '/Statistics',
+        path: 'Statistics',
         component: Statistics
       }, {
-        path: '/Student',
+        path: 'Student',
         component: Student
       }, {
-        path: '/Tools',
+        path: 'Tools',
         component: Tools
       }, {
-        path: '/Announcement',
+        path: 'Announcement',
         component: Announcement
       }
     ]
@@ -76,19 +79,21 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  // 几个特殊的路由运行通过就好了
-  if (to.path === '/admin/Login') return next()
-  if (to.path === '/student/Login') return next()
-
-  // 先截取路径前缀（动态获取根路径）
-  const pathStr = to.path.substring(1, to.path.substr(1).indexOf('/') + 1)
-
-  console.log('根路径为：' + pathStr)
-
-  // 获取token
-  const tokenStr = window.localStorage.getItem('token')
-  if (!tokenStr) return next(`/${pathStr}/Login`)
   next()
+  // if (to.path === '/') return next()
+  // // 几个特殊的路由运行通过就好了
+  // if (to.path === '/admin/Login') return next()
+  // if (to.path === '/student/Login') return next()
+
+  // // 先截取路径前缀（动态获取根路径）
+  // const pathStr = to.path.substring(1, to.path.substr(1).indexOf('/') + 1)
+
+  // console.log('根路径为：' + pathStr)
+
+  // // 获取token
+  // const tokenStr = window.localStorage.getItem('token')
+  // if (!tokenStr) return next(`/${pathStr}/Login`)
+  // next()
 })
 export default router
 // TODO:等待学生端实现，合并分支后需要调整路由注册规则
