@@ -14,7 +14,7 @@ export default {
       this.$router.push('/student')
     },
     pushToAdmin() {
-      this.$router.push('admin')
+      this.$router.push('admin/Login')
     }
   }
 }
