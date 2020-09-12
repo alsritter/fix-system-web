@@ -49,8 +49,8 @@
         </el-form-item>
         </el-form-item>
         <!--按钮   class='btns'-->
-        <el-form-item >
-          <el-button class="btns" type="primary"  @click='loginValidate'>登录</el-button>
+        <el-form-item class="btns">
+          <el-button type="primary"  @click='loginValidate'>登录</el-button>
         </el-form-item>
         <!-- 其它小功能 -->
         <!-- TODO: 功能还没做 -->
@@ -195,7 +195,7 @@ body{
   background-color: #409EFF;
   border-radius: 10px;
 }
-.btns >>> .el-button-item__header{
+.btns >>> .el-form-item__header{
   background-color:#E4B75F;
 }
 #count{
