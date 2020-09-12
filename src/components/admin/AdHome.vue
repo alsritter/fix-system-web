@@ -9,23 +9,12 @@
           text-color="#ffffff"
           active-color="#ff80aa"
           background-color="#0000"
-          router
+          :router="true"
         >
-          <el-submenu index="1">
-            <template slot="title">
-              <i class="el-icon-document"></i>
-              <span>订单</span>
-            </template>
-            <el-menu-item-group title="订单">
-              <el-menu-item index="1-1" @click="toOrder">
-              <i class="el-icon-loading"></i>
-              待处理的订单</el-menu-item>
-              <el-menu-item index="1-2" @click="toOrderInProgress">
-              <i class="el-icon-timer"></i>进行中的订单</el-menu-item>
-              <el-menu-item index="1-3" @click="toOrderFinished">
-              <i class="el-icon-document-checked"></i>已完成的订单</el-menu-item>
-            </el-menu-item-group>
-          </el-submenu>
+          <el-menu-item index="Order">
+            <i class="el-icon-user-solid"></i>
+            <span slot="title" id="sub4" @click="toStudent">订单</span>
+          </el-menu-item>
            <el-menu-item index="Student">
             <i class="el-icon-user-solid"></i>
             <span slot="title" id="sub5" @click="toStudent">学生管理</span>
@@ -42,10 +31,12 @@
             <i class="el-icon-data-analysis"></i>
             <span slot="title" id="sub7" @click="toStatistics">统计</span>
           </el-menu-item>
-           <el-menu-item index="Info">
+
+          <el-menu-item index="Info">
             <i class="el-icon-data-analysis"></i>
             <span slot="title" id="sub7" @click="toInfo">消息中心</span>
           </el-menu-item>
+
            <el-menu-item index="Announcement">
             <i class="el-icon-data-analysis"></i>
             <span slot="title" id="sub7" @click="toAnnouncement">发布公告</span>
@@ -81,7 +72,7 @@ export default {
       // this.$router.push('WorkerManage')
     },
     toSelfCenter() {
-      // this.$router.push('SelfCenter')
+      this.$router.push('SelfCenter')
     },
     toStudent() {
       // this.$router.push('Student')
