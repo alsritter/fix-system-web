@@ -9,7 +9,7 @@
           text-color="#ffffff"
           active-color="#ff80aa"
           background-color="#0000"
-          router
+          :router='true'
         >
           <el-submenu index="1">
             <template slot="title">
@@ -75,7 +75,7 @@ export default {
       // FIXME: 你侧边栏已经有路由跳转了，就无需这里手动跳转了，且跳转子路由前面不需要加 /
     },
     toInfo() {
-      // this.$router.push('Info')
+       //       this.$router.push('Info')
     },
     toWorkerManage() {
       // this.$router.push('WorkerManage')

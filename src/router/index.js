@@ -18,6 +18,7 @@ import OrderFinished from '../components/admin/OrderFinished.vue'
 import OrderDetails from '../components/admin/OrderDetails.vue'
 // 学生页面
 import StudentLogin from '@/components/student/StudentLogin'
+import StudentSignUp from '../components/student/SignUp.vue'
 import StudentHome from '@/components/student/StudentHome'
 
 Vue.use(VueRouter)
@@ -25,6 +26,7 @@ const routes = [
   { path: '/', component: Root },
   { path: '/admin/Login', component: AdminLogin },
   { path: '/student/Login', component: StudentLogin },
+  { path: '/student/signUp', component: StudentSignUp },
   {
     // 管理员路由注册
     path: '/admin',
@@ -70,7 +72,8 @@ const routes = [
   {
     path: '/student',
     component: StudentHome,
-    children: []
+    children: [
+    ]
   }
 ]
 const router = new VueRouter({

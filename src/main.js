@@ -5,6 +5,7 @@ import './plugins/element'
 import axios from 'axios'
 import 'element-ui/lib/theme-chalk/index.css'
 import './assets/css/global.css'
+import './assets/css/student.css'
 import ElementUI from 'element-ui'
 // 引入阿里图标库
 import './assets/css/iconfont.css'
