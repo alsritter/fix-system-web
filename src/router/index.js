@@ -70,7 +70,6 @@ const routes = [
   {
     path: '/student',
     component: StudentHome,
-    redirect: '/student/Login',
     children: []
   }
 ]

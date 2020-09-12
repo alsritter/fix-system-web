@@ -132,6 +132,9 @@ h3 {
   width: 100%;
   padding: 0px;
 }
+/*FIXME: 不要这样写死！！！！！ 这里是子组件的部分 */
+
+/*
 #begies{
       width: 90%;
     height: 90%;
@@ -139,6 +142,7 @@ h3 {
      display: block;
     margin: 0 auto;
 }
+*/
 .el-main{
   padding: 0px;
 }

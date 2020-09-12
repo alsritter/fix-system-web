@@ -42,6 +42,17 @@
           <el-button type='info' @click='getUtils'>获取验证码</el-button>
           <el-image :src='imageURL' id='count' @click='getUtils'></el-image>
         </el-form-item>
+        <!-- 其它小功能 -->
+        <!-- TODO: 功能还没做 -->
+        <el-form-item>
+          <el-radio>保持登陆</el-radio>
+        </el-form-item>
+        <el-form-item>
+          <el-radio>忘记密码</el-radio>
+        </el-form-item>
+        <el-form-item>
+         <el-link target="_blank">还没账号？立即登陆</el-link>
+        </el-form-item>
       </el-form>
     </div>
   </div>
