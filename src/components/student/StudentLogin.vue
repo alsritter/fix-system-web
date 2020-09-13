@@ -2,16 +2,16 @@
   <el-container>
     <div class='avatar_box'>
       <div id='image'>
-        <span :class='["iconfont image", headIcon]' :style="{color:stateColor}"></span>
+        <span :class='["iconfont image", headIcon]' :style='{color:stateColor}'></span>
       </div>
       <div id='font'>
-        <span class='font' :style="{color:stateColor}">Login</span>
+        <span class='font' :style='{color:stateColor}'>Login</span>
       </div>
     </div>
 
     <div class='login_box'>
       <el-form :model='loginForm' class='login_form' ref='loginFormRef' :rules='loginFormRules'>
-        <!-- 用户名 -->
+        <!-- 用户 id -->
         <el-form-item label-width='0px' prop='userID'>
           <el-input back v-model='loginForm.userID' placeholder='学生账号' class='student-login'></el-input>
         </el-form-item>
@@ -38,9 +38,9 @@
         <el-form-item label-width='50%' class='btns'>
           <el-button type='primary' @click='loginValidate()'>Login</el-button>
         </el-form-item>
-        <!-- 忘记密码 -->
+        <!-- 去注册 -->
         <el-form-item label-width='50%' class='text-link'>
-          <el-link :underline='false'>Forgot password?</el-link>
+          <el-link :underline='false' @click='goToRegister'>Go to Register</el-link>
         </el-form-item>
       </el-form>
     </div>
@@ -55,14 +55,19 @@ export default {
   data() {
     return {
       loginForm: {
-        userID: '201825070129',
+        userID: 201825070129,
         password: '1234567890',
         Ucode: ''
       },
       loginFormRules: {
         userID: [
           { required: true, message: '不要空着噢', trigger: 'blur' },
-          { min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur' }
+          {
+            min: 6,
+            max: 30,
+            message: '长度在 6 到 20 个数字',
+            trigger: 'blur'
+          }
         ],
         password: [
           { required: true, message: '不要空着噢', trigger: 'blur' },
@@ -72,11 +77,14 @@ export default {
         Ucode: [{ required: true, message: '不要空着噢', trigger: 'blur' }]
       },
       imageURL: '',
-      headIcon: 'icon-putong',
+      headIcon: 'icon-dai',
       stateColor: '#fff'
     }
   },
   methods: {
+    goToRegister() {
+      this.$router.push('/student/signUp')
+    },
     getUtils() {
       const uuid = new Date().getTime()
       sessionStorage.setItem('uuid', uuid)
@@ -90,7 +98,7 @@ export default {
         .then(response => {
           this.imageURL = window.webkitURL.createObjectURL(response.data)
         })
-        .catch((error) => {
+        .catch(error => {
           console.error(error)
           return this.$message.error('获取验证码错误')
         })
@@ -115,28 +123,33 @@ export default {
             uuid: uid // 时间戳参数
           })
           .then(res => {
+            if (res.data.data.code !== 200) {
+              // 更换为失败脸
+            that.headIcon = 'icon-kulian1'
+            that.stateColor = 'rgb(224 93 93)'
+            return that.$message.error('登陆失败')
+}
             that.$message.success('登录成功')
             // 更换为笑脸
             that.stateColor = 'rgb(129 228 100)'
-            that.headIcon = 'icon-xiaolian'
+            that.headIcon = 'icon-zhayan'
             window.localStorage.setItem('student-token', res.data.data.token)
             // 等待 0.5 秒再进去
             setTimeout(() => {
               this.$router.push('/student')
             }, 500)
           })
-          .catch((error) => {
+          .catch(error => {
             if (error.response.data.message === 'image code error') {
               return that.$message.error('验证码错误')
             }
             // 更换为失败脸
-            that.headIcon = 'icon-kulian'
+            that.headIcon = 'icon-kulian1'
             that.stateColor = 'rgb(224 93 93)'
             return that.$message.error('登录失败')
           })
       })
     }
-
   }
 }
 </script>

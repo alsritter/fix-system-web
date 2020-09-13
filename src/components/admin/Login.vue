@@ -18,7 +18,7 @@
         <!--输入框-->
         <!-- 这里删掉了el-form-item的label='工号'，写了个label  -->
         <el-form-item class='txt'>
-        <el-form-item  prop='userID' class="data">
+        <el-form-item  prop='userID' class="data" >
           <label >用户名</label>
           <el-input
             prefix-icon='el-icon-user'
@@ -26,7 +26,7 @@
             @keyup.enter.native='loginValidate'
           ></el-input>
         </el-form-item>
-        <!-- label='密码' -->
+        <!-- 写了label='密码' -->
         <el-form-item  prop='password'  class="data">
           <label > 密码</label>
           <el-input
@@ -36,7 +36,7 @@
             @keyup.enter.native='loginValidate'
           ></el-input>
         </el-form-item>
-        <!-- label='验证码' -->
+        <!-- 写了label='验证码' -->
         <el-form-item  prop='Ucode' class="data">
           <label > 验证码 :  </label>
           <!-- 这个是验证码图像，原本在按钮class='btns'里面的 -->
@@ -48,9 +48,9 @@
           ></el-input>
         </el-form-item>
         </el-form-item>
-        <!--按钮   class='btns'-->
+        <!--按钮-->
         <el-form-item class="btns">
-          <el-button type="primary"  @click='loginValidate'>登录</el-button>
+          <el-button type="primary" style="background-color: #E8BD65; border-style : none; " @click='loginValidate'>登录</el-button>
         </el-form-item>
         <!-- 其它小功能 -->
         <!-- TODO: 功能还没做 -->
@@ -142,6 +142,7 @@ export default {
             that.$message.success('登录成功')
             window.localStorage.setItem('admin-token', res.data.data.token)
             this.$router.push('SelfCenter')
+            sessionStorage.clear()
           })
           .catch((error) => {
             if (error.response.data.message === 'image code error') {
@@ -175,16 +176,18 @@ body{
 .login1{
   font-size: 25px;
   font-family: 微软雅黑;
+  height: 45px;
   text-align: center;
 }
 /* 下面那个蓝色框 */
 .login-form {
   border-radius: 20px;
-  background-color: #CED9D9;
-  padding: 30px;
+  height: 400px;
+  background-color: #C4D0D1;
+  padding: 25px;
   text-align: center;
 }
-/* 里面的字体 */
+/* 蓝色框里面的字体 */
 .data{
   font-size: 14px;
   color: #fff;
@@ -192,16 +195,16 @@ body{
   font-family: 宋体;
 }
 .btns{
-  background-color: #409EFF;
+  background-color: #E8BD65;
   border-radius: 10px;
 }
-.btns >>> .el-form-item__header{
-  background-color:#E4B75F;
+.el-image{
+  width: 100px;
+  height: 40px;
+  top: 2px;
+  float: right;
 }
-#count{
-  float:right;
-  width: 100%;
-  text-align:right;
-  top:5px;
+.el-form-item__content {
+  width: 400px;
 }
 </style>
