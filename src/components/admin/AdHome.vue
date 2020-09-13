@@ -9,11 +9,7 @@
           text-color="#ffffff"
           active-color="#ff80aa"
           background-color="#0000"
-<<<<<<< HEAD
-          :router='true'
-=======
           :router="true"
->>>>>>> 5272fdf65ab0d04106aaca56f5550123d10b40ed
         >
           <el-menu-item index="Order">
             <i class="el-icon-user-solid"></i>
@@ -66,7 +62,6 @@ export default {
   methods: {
     signOut() {
       window.localStorage.clear()
-      this.$router.push('Login')
       // FIXME: 你侧边栏已经有路由跳转了，就无需这里手动跳转了，且跳转子路由前面不需要加 /
     },
     toInfo() {
