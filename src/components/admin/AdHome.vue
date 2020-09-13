@@ -65,7 +65,7 @@ export default {
       this.$router.push('Login')
     },
     toInfo() {
-      // this.$router.push('Info')
+       //       this.$router.push('Info')
     },
     toWorkerManage() {
       // this.$router.push('WorkerManage')

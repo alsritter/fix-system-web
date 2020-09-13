@@ -1,10 +1,10 @@
 @font-face {font-family: "iconfont";
-  src: url('iconfont.eot?t=1599718772617'); /* IE9 */
-  src: url('iconfont.eot?t=1599718772617#iefix') format('embedded-opentype'), /* IE6-IE8 */
-  url('data:application/x-font-woff2;charset=utf-8;base64,d09GMgABAAAAAAN0AAsAAAAACLwAAAMmAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHEIGVgCDDAqFDIRHATYCJAMQCwoABCAFhG0HRBulBxHVmwXIfhzGMcma/HNmvIr2aOx7EKJOOsVK6ydkmkLPI9BIWzbnqnoyKkKN5Fv06Aspbksvyx4C4H+OmS6fDyy/zeaSkZhBax6OBhZ1mXpkuwOJEvMbxi4v8nYIkJK8lEYaN23dGYuibxNARo8YNgCbUKIVOMFKEgWnKrIeF+uscF6jWOe9vvxkEAsOrkHf235ok8HU/9r9a08zP57f20HAGk4PsLPAAKUBBeleaOyICYKlMaSUg0pRWNYyga894/hrd4e52H95IDgYkAS6MDXEVhaYQ2JZFAh87aHH4QhZUInBaN1sgSzAC5QUANjcgqSBT50mnaRRpE7j8FJSQQZ69QFR1C0Mu/p+5yDotjIMF0RRqiDo4vsFsZ03zz+xKluUeJct1/YNTbllx5FVx3Yt2Hl05eHtA1LOB2V1L7vFGxucZtWpsylTrzx9ou0XOvBOsCqqt23ByZWZ/ZVdt17e3W2onLjGLf3/X28ZNIdu50WxtYeeGjTk/FOT5sYO3Wc8z+wzaM7Ta17r3+uP07f7ypwVc25v0eSBtGr+sfrm+Vkrp3k6J9ecMHcIgk8Hp6mU1hfmzukmw/dc/flAsenadc5ULn8me6D5y/UaM807Oa7MTFN5cufCZU3vw9lfVd/U6ot48ApA/NTcNDW9vxBA4OKVrS/7pav9x6ZSAD7M+zIZOOKnSvMULA4w1t/AalinCkdXqUpci6mmKk1Jwk2Wk9LwQIxuzcjnIcRZGvtBsAkWA4ckecBgKYxUbGlwSUVlSGCpBykpRbOzU5GJiRhEUwAlWQJASM85cEjLPTCk5w1SsZ/AJSu/IUF6MZCSrpLpkqkoKnI6nBi1oAPzh2Rp9qZGDn7mHcM6ao5zPPwbeUke6JsuHbnhjDzEEcsnDCIePNMEV3A3HEeCypTRShNF6rFtfdELNZYmdeDEqAUdmD8kS7N3Jsshc/g7hnXUXFFUpn4jL2l+6JuuAfImnBsVXcri5RMGEY83eaYJrlCPoxEkqMWrMlppYgd/PbaomW8qbKYXT3d4CkiJ/jwVR4youGxGrWPS86auQnPY/ZKmpEIpAAA=') format('woff2'),
-  url('iconfont.woff?t=1599718772617') format('woff'),
-  url('iconfont.ttf?t=1599718772617') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
-  url('iconfont.svg?t=1599718772617#iconfont') format('svg'); /* iOS 4.1- */
+  src: url('iconfont.eot?t=1599881064939'); /* IE9 */
+  src: url('iconfont.eot?t=1599881064939#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('data:application/x-font-woff2;charset=utf-8;base64,d09GMgABAAAAAAUYAAsAAAAACywAAATLAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHEIGVgCDPgqJHIgIATYCJAMcCxAABCAFhG0HXRu9CVFUTqJkPzV5skwGa8RGA7AYIhBFYQgAAFwAAIULIh7+W/vdNzsrXxBtavF3xCqJQzStlAyxkQLdS9jNacq/JqA6ng0fdS00uT+R885yzlE6FpsMFaEC2NKiDv+d+pIbgxIpACXlZfNdzVTEgumPn2Th5x8cS/0ofbA8+2+0F8qMVWAkJY4GFNE8kAfeZqMCsi2wc1t1MAkPE+ia5RCHB2eXMJLxqsCaF51KGDnMcgQxNLoq4MIM8Q6ua9In9gSAN+3j4x9EMQJJWQD/qNO7/QS2vvwFQvB/GIILGMDFOXG7jALbQCbuAt0XukZ6W1f3w9kzACq5OX1h3wX+bylS5a+Zaaa6i8mkkPEfryIq4NV9xJ5nKr6ABIIvkPhyKgypBOlkvgOcSlMoQY1BRdeHD2MBxCtA6gN2oM4Cqg6O3e6NaQfkXI6vkghEdgwRTQSiosBxKk7OUYAyeAJMJyBMApV1gT+8iW5Tt5CNGAIgBpkzw5txVD4Bou/u4XgMLqKBWl/PN6A/EBZQXFKs5b8IrqvlbVplMPAoS4vKnzHUM9AInjUYavNQHyGnpgCETj8RqAWvm9bxDhsNs1CGwaJCfwsfXz1mihnBYvlBmy+d7s1g+CG/IjyD4UOnBxR618KDKD/L8S118x2xuLqmXrS/hdrch/Q0RuBgGFX2Uaf4ZNFEdHgMR0BGBtP+oZGrDJRl1kAdQnjoiG/9TKtfUTcQ5zYNodmQybbdi7Y0MoVmuyTegkKxoS3adFPINJsqLel0o3Q7adfkVGAGpPRIsB1sDEmAkEVIPEkqBIVms9htQ+4PMrnb9teq1A+vtr1sb2yYbfxvA6f8+E6yzJNAUoEPaZu3MINijOMGAH1vJeXNpRbywPIhFgPEvZzC+u0LCuz71xiBKjCnrj375OM5R6ndOKc0zYgmzTmu16pBqrKvNrpjT8321gridpBUawYCS3B6nN5i8yqM9CCCBPmgPE48shhMX7Ul+G+wfO2HvCwIFKE8yCo0jh2OipnYEwVqYWwH9OQJ1CEIlNcbzocHfcWG+iNCmkKNDjabGCf7l/q1MJ82ca9IuIgpwoT0XjRRi01Xi/iMa/Fz1j8oqJDdzZtbTZxbXlBxtVwL8p4Mpanki+ah5oYbbDdw68f6NU5+vl6nvgC0a91NyAxAu6EhLcjT3UvIif8etAQZasQhcsCvzj4lbGn8tcGfLKs+74Q/UKid7oHsFRqJxJLLQJJwUv7KeEud3yNL4oTe2snhk0zoCjFawPvH/RannUqsdqVppyxIajNQaCwjM3YbSj0DqDR2oGvL4eU9E6yuyGNg0ytAGPUFybAPKIz6RmbsD5Sm/UNlNLoC9J4FN96wZzX0xMqSZEpwfY86NpUSbTzRa88pbQtp7TKNdE220TEMvcCdO6SKbBGnNDdpxKxQWVPiATyOisJgbU1GMXsb5nrl+yrojbzYlDBxwCISIwm0dg9pMaOilJXZxPP+50iqVZBsxLAf3mvEaujto5AnSIA8VFeJhm1Kc+NGKsKUVJC6VRsldEBOUghpA9XB+2VIjHk2GZK1FZ+mU0nVXvXacj5vgi7+xXV0RFf0RF8MxFCMoLiRepC/kfeyGia1hVYt4YDbc5DesqnSEVlL4zQBAAA=') format('woff2'),
+  url('iconfont.woff?t=1599881064939') format('woff'),
+  url('iconfont.ttf?t=1599881064939') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
+  url('iconfont.svg?t=1599881064939#iconfont') format('svg'); /* iOS 4.1- */
 }
 
 .iconfont {
@@ -13,6 +13,18 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-dai:before {
+  content: "\e600";
+}
+
+.icon-zhayan:before {
+  content: "\e601";
+}
+
+.icon-kulian1:before {
+  content: "\e602";
 }
 
 .icon-kulian:before {
