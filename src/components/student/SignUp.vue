@@ -69,7 +69,7 @@
         </el-form-item>
         <!-- 返回登陆 -->
         <el-form-item label-width='50%' class='text-link'>
-          <el-link :underline='false' @click="backToLogin()">Back to login</el-link>
+          <el-link :underline='false' @click='backToLogin()'>Back to login</el-link>
         </el-form-item>
       </el-form>
     </div>
@@ -93,6 +93,14 @@ export default {
         Ucode: ''
       },
       signUpFormRules: {
+        name: [
+          {
+            min: 2,
+            max: 10,
+            message: '长度在 2 到 10 个字符',
+            trigger: 'blur'
+          }
+        ],
         userID: [
           {
             required: true,
@@ -100,7 +108,7 @@ export default {
             trigger: 'blur',
             type: 'number'
           },
-          { min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur' }
+          { validator: this.isExist, trigger: 'blur' }
         ],
         password: [
           {
@@ -109,9 +117,30 @@ export default {
             trigger: 'blur'
           },
           // trigger: 'blur' 是失去焦点触发，change 是改变后触发
-          { min: 4, max: 20, message: '长度在 4 到 20 个字符', trigger: 'blur' }
+          {
+            min: 4,
+            max: 20,
+            message: '长度在 4 到 20 个字符',
+            trigger: 'blur'
+          }
         ],
-        Ucode: [{ required: true, message: '不要空着噢', trigger: 'blur' }]
+        checkPass: [
+          {
+            min: 4,
+            max: 20,
+            message: '长度在 4 到 20 个字符',
+            trigger: 'blur'
+          },
+          { validator: this.checkPassword, trigger: 'blur' }
+        ],
+        Ucode: [{ required: true, message: '不要空着噢', trigger: 'blur' }],
+        phone: [
+          { required: true, trigger: 'blur' },
+          {
+            validator: this.checkPhone,
+            trigger: 'blur'
+          }
+        ]
       },
       imageURL: '',
       headIcon: 'icon-dai',
@@ -119,7 +148,48 @@ export default {
     }
   },
   methods: {
-    isExist() {},
+    checkPhone(rule, value, callback) {
+      if (!value) {
+        return callback(new Error('手机号不能为空'))
+      } else {
+        const reg = /^1[3|4|5|7|8][0-9]\d{8}$/
+        if (reg.test(value)) {
+          callback()
+        } else {
+          return callback(new Error('请输入正确的手机号'))
+        }
+      }
+    },
+    checkPassword(rule, value, callback) {
+      if (value === '') {
+        return callback(new Error('请再次输入密码'))
+      } else if (value !== this.signUpForm.password) {
+        callback(new Error('两次输入密码不一致!'))
+      } else {
+        callback()
+      }
+    },
+    isExist(rule, value, callback) {
+      this.$http
+        .get('utils/is-exist', {
+          params: {
+            id: value
+          }
+        })
+        .then(response => {
+          // fasle 表示用户不存在
+          if (!response.data.data) {
+            callback()
+          } else {
+            callback(new Error('当前用户已经存在!'))
+          }
+        })
+        .catch(error => {
+          // 出现未知错误也禁止注册
+          console.error(error)
+          callback(new Error('当前用户已经存在!'))
+        })
+    },
     backToLogin() {
       this.$router.push('/student/Login')
     },
@@ -146,7 +216,6 @@ export default {
       const that = this
       this.$refs.signUpFormRef.validate(async validate => {
         const uid = sessionStorage.getItem('uuid')
-        // const that = this
 
         if (!validate) {
           return this.$message.error('请把信息填写完整！')
@@ -154,14 +223,17 @@ export default {
 
         // 发起axios请求
         await that.$http
-          .post('student/login', {
+          .post('student/sign-up', {
             studentId: that.signUpForm.userID, // 表单参数 3个
             password: that.signUpForm.password,
             codevalue: that.signUpForm.Ucode,
+            name: that.signUpForm.name,
+            phone: that.signUpForm.phone,
+            gender: that.signUpForm.gender,
             uuid: uid // 时间戳参数
           })
           .then(res => {
-            that.$message.success('登录成功')
+            that.$message.success('注册成功！')
             // 更换为笑脸
             that.stateColor = 'rgb(129 228 100)'
             that.headIcon = 'icon-zhayan'
@@ -175,10 +247,11 @@ export default {
             if (error.response.data.message === 'image code error') {
               return that.$message.error('验证码错误')
             }
+
             // 更换为失败脸
             that.headIcon = 'icon-kulian1'
             that.stateColor = 'rgb(224 93 93)'
-            return that.$message.error('登录失败')
+            return that.$message.error('注册失败')
           })
       })
     }

@@ -60,15 +60,7 @@ export default {
         Ucode: ''
       },
       loginFormRules: {
-        userID: [
-          { required: true, message: '不要空着噢', trigger: 'blur' },
-          {
-            min: 6,
-            max: 30,
-            message: '长度在 6 到 20 个数字',
-            trigger: 'blur'
-          }
-        ],
+        userID: [{ required: true, message: '不要空着噢', trigger: 'blur' }],
         password: [
           { required: true, message: '不要空着噢', trigger: 'blur' },
           // trigger: 'blur' 是失去焦点触发，change 是改变后触发
@@ -123,12 +115,6 @@ export default {
             uuid: uid // 时间戳参数
           })
           .then(res => {
-            if (res.data.data.code !== 200) {
-              // 更换为失败脸
-            that.headIcon = 'icon-kulian1'
-            that.stateColor = 'rgb(224 93 93)'
-            return that.$message.error('登陆失败')
-}
             that.$message.success('登录成功')
             // 更换为笑脸
             that.stateColor = 'rgb(129 228 100)'
