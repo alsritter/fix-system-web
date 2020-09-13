@@ -4,23 +4,31 @@
       <div class='avatar_box'>
         <img src='/src/assets/img/hua.jpg' alt />
       </div>
-      <!--表单登录区-->
-      <el-form
+      <!--表单登录区  修改了label-width='80px'-->
+      <div class="login">
+        <div class="login1">登录</div>
+        <div class="login2">
+          <el-form
         :model='loginForm'
-        label-width='80px'
-        class='login-form'
+        label-width='0px'
         :rules='loginFormRules'
         ref='loginFormRef'
+        class="login-form"
       >
         <!--输入框-->
-        <el-form-item label='工号' prop='userID'>
+        <!-- 这里删掉了el-form-item的label='工号'，写了个label  -->
+        <el-form-item class='txt'>
+        <el-form-item  prop='userID' class="data" >
+          <label >用户名</label>
           <el-input
             prefix-icon='el-icon-user'
             v-model='loginForm.userID'
             @keyup.enter.native='loginValidate'
           ></el-input>
         </el-form-item>
-        <el-form-item label='密码' prop='password'>
+        <!-- 写了label='密码' -->
+        <el-form-item  prop='password'  class="data">
+          <label > 密码</label>
           <el-input
             prefix-icon='el-icon-lock'
             type='password'
@@ -28,30 +36,37 @@
             @keyup.enter.native='loginValidate'
           ></el-input>
         </el-form-item>
-        <el-form-item label='验证码' prop='Ucode'>
+        <!-- 写了label='验证码' -->
+        <el-form-item  prop='Ucode' class="data">
+          <label > 验证码 :  </label>
+          <!-- 这个是验证码图像，原本在按钮class='btns'里面的 -->
+        <el-image :src='imageURL' id='count' @click='getUtils'></el-image>
           <el-input
             prefix-icon='el-icon-lock'
             v-model='loginForm.Ucode'
             @keyup.enter.native='loginValidate'
           ></el-input>
         </el-form-item>
+        </el-form-item>
         <!--按钮-->
-        <el-form-item class='btns'>
-          <el-button type='primary' @click='loginValidate'>登录</el-button>
-          <el-image :src='imageURL' id='count' @click='getUtils'></el-image>
+        <el-form-item class="btns">
+          <el-button type="primary" style="background-color: #E8BD65; border-style : none; " @click='loginValidate'>登录</el-button>
         </el-form-item>
         <!-- 其它小功能 -->
         <!-- TODO: 功能还没做 -->
-        <el-form-item>
+        <el-form-item >
           <el-radio>保持登陆</el-radio>
-        </el-form-item>
-        <el-form-item>
           <el-radio>忘记密码</el-radio>
         </el-form-item>
+        <!-- 忘记密码的单选框放在上面了 -->
+        <!-- <el-form-item > -->
+        <!-- </el-form-item> -->
         <el-form-item>
          <el-link target="_blank">还没账号？立即登陆</el-link>
         </el-form-item>
       </el-form>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -140,17 +155,56 @@ export default {
   }
 }
 </script>
-
 <style>
-.btns {
-  display: flex;
-  justify-content: flex-start;
+*{
+  margin: 0;
+  padding: 0;
+  outline:none;
 }
+body{
+  height: 100%;
+  width: 100%;
+  background-color: #FEB6B9;
+}
+/* 登录和蓝色框 */
+.login{
+ position: absolute;
+  top: 10%;
+  left: 40%;
+}
+/* 登录框 */
+.login1{
+  font-size: 25px;
+  font-family: 微软雅黑;
+  height: 45px;
+  text-align: center;
+}
+/* 下面那个蓝色框 */
 .login-form {
-  position: absolute;
-  width: 40%;
+  border-radius: 20px;
+  height: 400px;
+  background-color: #C4D0D1;
+  padding: 25px;
+  text-align: center;
 }
-#count {
-  margin-left: 10px;
+/* 蓝色框里面的字体 */
+.data{
+  font-size: 14px;
+  color: #fff;
+  text-align:left;
+  font-family: 宋体;
+}
+.btns{
+  background-color: #E8BD65;
+  border-radius: 10px;
+}
+.el-image{
+  width: 100px;
+  height: 40px;
+  top: 2px;
+  float: right;
+}
+.el-form-item__content {
+  width: 400px;
 }
 </style>
