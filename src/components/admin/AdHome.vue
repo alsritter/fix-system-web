@@ -63,7 +63,6 @@ export default {
     signOut() {
       window.localStorage.clear()
       this.$router.push('Login')
-      // FIXME: 你侧边栏已经有路由跳转了，就无需这里手动跳转了，且跳转子路由前面不需要加 /
     },
     toInfo() {
       // this.$router.push('Info')
@@ -123,7 +122,6 @@ h3 {
   width: 100%;
   padding: 0px;
 }
-/*FIXME: 不要这样写死！！！！！ 这里是子组件的部分 */
 
 /*
 #begies{

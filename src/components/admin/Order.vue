@@ -1,215 +1,436 @@
 <template>
-    <div>
-        <div class="OrderBox">
-            <ul  v-for="item in orders" :key="item.fixTableId" id="orderItem">
-                <li v-if="item.state == 0">
-                     <h6 class="h6">
-                    订单ID:{{item.fixTableId}} 电话:{{item.phone}}地址:{{item.address}}
-                    具体问题:<el-button type="text" @click="dialogVisible = true">点击打开 Dialog</el-button>
-                            <el-dialog
-                            title="问题描述"
-                            :visible.sync="dialogVisible"
-                            width="30%"
-                            :before-close="handleClose">
-                            <span>{{item.faultDetail}}</span>
-                            <span slot="footer" class="dialog-footer">
-                                <el-button @click="dialogVisible = false">取 消</el-button>
-                                <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-                            </span>
-                            </el-dialog>
-                            <img src="//未处理" alt="">
-                            <el-button type="primary" @click="worker = true">选择工人</el-button>
-                            <el-dialog
-                            title="问题描述"
-                            :visible.sync="worker"
-                            width="30%"
-                            :before-close="handleClose">
-                            <span>{{item.address}}</span>
-                            <span slot="footer" class="dialog-footer">
-                                <el-button @click="worker = false">取 消</el-button>
-                                <el-button type="primary" @click="worker = false">确 定</el-button>
-                            </span>
-                            </el-dialog>
-                      </h6>
-                </li>
-                 <li v-if="item.state == 1">
-                     <h6 class="h6">
-                    订单ID:{{item.fixTableId}} 电话:{{item.phone}}地址:{{item.address}}
-                    具体问题:<el-button type="text" @click="dialogVisible = true">点击打开 Dialog</el-button>
-                            <el-dialog
-                            title="问题描述"
-                            :visible.sync="dialogVisible"
-                            width="30%"
-                            :before-close="handleClose">
-                            <span>{{item.faultDetail}}</span>
-                            <span slot="footer" class="dialog-footer">
-                                <el-button @click="dialogVisible = false">取 消</el-button>
-                                <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-                            </span>
-                            </el-dialog>
-                            <img src="//未处理" alt="">
-                            <el-button type="primary" @click="worker = true">选择工人</el-button>
-                            <el-dialog
-                            title="问题描述"
-                            :visible.sync="worker"
-                            width="30%"
-                            :before-close="handleClose">
-                            <span>{{item.address}}</span>
-                            <span slot="footer" class="dialog-footer">
-                                <el-button @click="worker = false">取 消</el-button>
-                                <el-button type="primary" @click="worker = false">确 定</el-button>
-                            </span>
-                            </el-dialog>
-                      </h6>
-                </li>
-                 <li v-if="item.state == 2">
-                     <h6 class="h6">
-                    订单ID:{{item.fixTableId}} 电话:{{item.phone}}地址:{{item.address}}
-                    具体问题:<el-button type="text" @click="dialogVisible = true">点击打开 Dialog</el-button>
-                            <el-dialog
-                            title="问题描述"
-                            :visible.sync="dialogVisible"
-                            width="30%"
-                            :before-close="handleClose">
-                            <span>{{item.faultDetail}}</span>
-                            <span slot="footer" class="dialog-footer">
-                                <el-button @click="dialogVisible = false">取 消</el-button>
-                                <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-                            </span>
-                            </el-dialog>
-                            <img src="//未处理" alt="">
-                            <el-button type="primary" @click="worker = true">选择工人</el-button>
-                            <el-dialog
-                            title="问题描述"
-                            :visible.sync="worker"
-                            width="30%"
-                            :before-close="handleClose">
-                            <span>{{item.address}}</span>
-                            <span slot="footer" class="dialog-footer">
-                                <el-button @click="worker = false">取 消</el-button>
-                                <el-button type="primary" @click="worker = false">确 定</el-button>
-                            </span>
-                            </el-dialog>
-                      </h6>
-                </li>
-            </ul>
-
-             <el-button type="primary" icon="el-icon-search"
-             @click="getOrder" class="btn">拉取订单</el-button>
-             <!-- 分页 -->
-             <div class="block">
-                <el-pagination
-                    @current-change="handleCurrentChange"
-                    layout="prev, pager, next"
-                    :total="50"
-                    :page-size="10">
-                </el-pagination>
+  <div>
+    <div class='OrderBox'>
+      <el-table
+        :data='orders.slice((currentPage-1)*pagesize,currentPage*pagesize)'
+        style='width: 100%'
+        :default-sort='{prop: "createdTime", order: "descending"}'
+        @row-click="getorderId"
+        @cell-mouse-enter="getorderId"
+        :row-class-name="tableRowClassName"
+      >
+      <!-- 大表格内容 -->
+        <el-table-column prop='fixTableId' label='单号' width='180' sortable></el-table-column>
+        <el-table-column prop='studentId' label='学生号' width='180'></el-table-column>
+        <el-table-column prop='address' label='地址'></el-table-column>
+        <el-table-column prop='createdTime' label='创建时间'
+        sortable :formatter="dateFormat"></el-table-column>
+        <el-table-column prop='faultClass' label='报修类型'></el-table-column>
+        <el-table-column prop='contacts' label='联系人'></el-table-column>
+        <el-table-column prop='phone' label='电话'></el-table-column>
+        <el-table-column prop='state' label='状态'
+        sortable :formatter="statusFormat"></el-table-column>
+        <el-table-column fixed='right' label='操作' width='120'>
+          <!-- 按钮 -->
+          <template slot-scope='scope'>
+            <el-button
+              type='text'
+              @click='questDetails0 = true ; getDetails0(scope.row)'
+              v-if='scope.row.state === 0'
+            >点击查看保修详情</el-button>
+            <el-button
+              type='primary'
+              @click='selectWorker = true ; getWorker() ; getorderId(scope.row)'
+              v-if='scope.row.state === 0'
+            >选择工人</el-button>
+            <el-button
+              type='text'
+              @click='questDetails1 = true ; getDetails1(scope.row)'
+              v-if='scope.row.state === 1'
+            >点击查看保修详情</el-button>
+            <el-button
+              type='text'
+              @click='questDetails2 = true ; getDetails2(scope.row)'
+              v-if='scope.row.state === 2'
+            >点击查看保修详情</el-button>
+            <el-button
+              type='primary'
+              @click='getOrderDetails(scope.row.fixTableId) ; seeDetails = true ; getorderId(scope.row) ; sentValue(scope.row) '
+              v-if='scope.row.state === 2'
+            >查看详情</el-button>
+            <el-button
+              @click.native.prevent='
+                            deleteRow(scope.$index, orders) ;
+                            removeOrder(scope.$fixTableId)  ;'
+              v-if='scope.row.state != 2'
+              type='text'
+              size='small'
+            >移除</el-button>
+             <!-- 弹窗内容 -->
+            <div>
+              <!-- 待处理 -->
+              <el-dialog
+                title='问题描述'
+                :visible.sync='questDetails0'
+                width='70%'
+                :append-to-body='true'
+              >
+                <span>{{Details0}}</span>
+                <span slot='footer' class='dialog-footer'>
+                  <el-button @click='questDetails0 = false'>取 消</el-button>
+                  <el-button type='primary' @click='questDetails0 = false'>确 定</el-button>
+                </span>
+              </el-dialog>
+              <!-- 选择工人 -->
+              <el-dialog
+                title='问题描述'
+                :visible.sync='selectWorker'
+                width='70%'
+                :append-to-body='true'
+              >
+                <span>
+                  <el-table
+                    ref='singleTable'
+                    :data='workerData'
+                    highlight-current-row
+                    style='width: 100%'
+                    @row-click='getworkerId'
+                    max-height='250'
+                    @cell-mouse-enter="getworkerId"
+                  >
+                    <el-table-column property='gender' label='性别' width='50'></el-table-column>
+                    <el-table-column property='id' label='工号' width='120'></el-table-column>
+                    <el-table-column property='name' label='姓名' width='120'></el-table-column>
+                    <el-table-column property='phone' label='电话'></el-table-column>
+                    <el-table-column fixed='right' label='操作' width='120'>
+                      <template>
+                        <el-button @click='commitWorker()' type='text' size='small'>选择</el-button>
+                      </template>
+                    </el-table-column>
+                  </el-table>
+                </span>
+                <span slot='footer' class='dialog-footer'>
+                  <el-button @click='selectWorker = false'>取 消</el-button>
+                  <el-button type='primary' @click='selectWorker = false'>确 定</el-button>
+                </span>
+              </el-dialog>
+              <!-- 进行中 -->
+              <el-dialog
+                title='问题描述'
+                :visible.sync='questDetails1'
+                width='70%'
+                :append-to-body='true'
+              >
+                <span>{{Details1}}</span>
+                <span slot='footer' class='dialog-footer'>
+                  <el-button @click='questDetails1 = false'>取 消</el-button>
+                  <el-button type='primary' @click='questDetails1 = false'>确 定</el-button>
+                </span>
+              </el-dialog>
+              <el-dialog
+                title='问题描述'
+                :visible.sync='changeWorker'
+                width='70%'
+                :append-to-body='true'
+              >
+                <span>
+                </span>
+                <span slot='footer' class='dialog-footer'>
+                  <el-button @click='changeWorker = false'>取 消</el-button>
+                  <el-button type='primary' @click='changeWorker = false'>确 定</el-button>
+                </span>
+              </el-dialog>
+              <!-- 已完成 -->
+              <el-dialog
+                title='问题描述'
+                :visible.sync='questDetails2'
+                width='70%'
+                :append-to-body='true'
+              >
+                <span>{{Details2}}</span>
+                <span slot='footer' class='dialog-footer'>
+                  <el-button @click='questDetails2 = false'>取 消</el-button>
+                  <el-button type='primary' @click='questDetails2 = false'>确 定</el-button>
+                </span>
+              </el-dialog>
+              <!-- 查看详情 -->
+              <el-dialog
+                title='问题描述'
+                :visible.sync='seeDetails'
+                width='70%'
+                :append-to-body='true'
+              >
+                <span>
+                  单号{{orderDertails.fixTableId}}<br>
+                  学生号{{orderDertails.studentId}}<br>
+                  联系人{{orderDertails.contacts}}<br>
+                  地址{{orderDertails.address}}<br>
+                  创建时间{{orderDertails.createdTime}}<br>
+                  完成时间{{orderDertails.endTime}}<br>
+                  电话{{orderDertails.phone}}<br>
+                  报修类型{{orderDertails.faultClass}}<br>
+                  报修描述{{orderDertails.faultDetail}}<br>
+                  工人工号{{orderDertails.workId}}<br>
+                  处理结果{{orderDertails.resultDetails}}<br>
+                  消息{{orderDertails.massage}}<br>
+                  <!-- 评分 -->
+                  <el-rate
+                    v-model="value"
+                    disabled
+                    show-score
+                    text-color="#ff9900"
+                    score-template="{value}">
+                  </el-rate>
+                </span>
+                <span slot='footer' class='dialog-footer'>
+                  <el-button @click='seeDetails = false'>取 消</el-button>
+                  <el-button type='primary' @click='seeDetails = false'>确 定</el-button>
+                </span>
+              </el-dialog>
             </div>
-        </div>
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-button type='primary' icon='el-icon-search' @click='getOrder' class='btn'>刷新订单</el-button>
+      <!-- 大表格分页 -->
+      <div class='block'>
+        <el-pagination @current-change='current_change' layout='prev, pager, next' :total='total'></el-pagination>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
-    export default {
-        created() {
-            this.getOrder()
-        },
-        data() {
-            return {
-                orders: [],
-                fixTableId: '1',
-                activeName: '1',
-                workerData: [],
-                dialogVisible: false,
-                worker: false
-            }
-        },
-        methods: {
-            getOrder() {
-            const that = this
-            async function getOrder() {
-            await that.$http
-            .get('admin/order-list')
-            .then((response) => {
-                if (response.data.code !== 200) return that.$message.error('拉取失败')
-                that.$message.success('拉取订单成功')
-                that.orders = response.data.data
-            })
-            }
-            getOrder()
-            },
-            getWorker() {
-                 const that = this
-            async function seeWorker() {
-            await that.$http
-            .get('admin/select-worker')
-            .then((response) => {
-                if (response.data.code !== 200) return that.$message.error('拉取工人失败')
-                that.$message.success('拉取工人成功')
-                that.workerData = response.data.data
-            })
-            }
-            seeWorker()
-            },
-            handleClose(done) {
-                this.$confirm('确认关闭？')
-                .then(_ => {
-                    done()
-                })
-                .catch(_ => {})
-            },
-            handleCurrentChange() {
-            const that = this
-            async function getOrder() {
-            await that.$http
-            .get('admin/order-list')
-            .then((response) => {
-                if (response.data.code !== 200) return that.$message.error('拉取失败')
-                that.$message.success('拉取订单成功')
-                that.orders = response.data.data
-            })
-            }
-            getOrder()
-            }
-        }
+import moment from 'moment'
+export default {
+  created() {
+    this.getOrder()
+  },
+  data() {
+    return {
+      // 评分
+      value: null,
+      // 问题描述
+      Details0: '',
+      Details1: '',
+      Details2: '',
+      // 分页数据
+      total: 0,
+      pagesize: 10,
+      currentPage: 1,
+      // 订单列表
+      orders: [],
+      // 某个订单的id
+      fixTableId: '0',
+      activeName: '1',
+      // 工人列表
+      workerData: [],
+      // 某个工人的ID
+      workerId: '0',
+      // 左侧按钮
+      questDetails0: false,
+      questDetails1: false,
+      questDetails2: false,
+      // 右侧按钮
+      selectWorker: false,
+      changeWorker: false,
+      seeDetails: false,
+      // 订单详情
+      orderDertails: {}
     }
+  },
+  methods: {
+    // 显示订单状态颜色的函数
+    tableRowClassName({ row }) {
+      console.log(row.state)
+        if (row.state === 0) {
+          return 'warning-row'
+        } else if (row.state === 1) {
+          return 'success-row'
+        } else if (row.state === 2) {
+          return ''
+        }
+        return ''
+      },
+    // 表格处理时间的函数
+     dateFormat: function(row, column) {
+         var date = row[column.property]
+         if (date === undefined) {
+                    return ''
+                }
+                return moment(date).format('YYYY-MM-DD HH:mm:ss')
+     },
+     // 格式化状态
+     statusFormat: function(row, column) {
+         var state = row[column.property]
+         if (state === 0) {
+                    return '待处理'
+          } else if (state === 1) {
+              return '进行中'
+          } else if (state === 2) {
+              return '已完成'
+          }
+     },
+    // 保存评分到model层
+    sentValue(row) {
+        this.value = row.grade / 2
+    },
+    // 获取问题描述的3个方法
+    getDetails0(row) {
+      this.Details0 = row.faultDetail
+    },
+    getDetails1(row) {
+      this.Details1 = row.faultDetail
+    },
+    getDetails2(row) {
+      this.Details2 = row.faultDetail
+    },
+    // 翻页函数
+    current_change: function (currentPage) {
+      this.currentPage = currentPage
+    },
+    // 获取订单 ID 函数
+     getorderId(row) {
+      this.fixTableId = row.fixTableId
+      console.log('单号' + this.fixTableId)
+    },
+    // 获取工人ID函数
+    getworkerId(row) {
+      this.workerId = row.id
+      console.log('工号' + this.workerId)
+    },
+    // 取消订单
+    removeOrder() {
+      const that = this
+      // const orderId = localStorage.getItem('orderId')
+      async function seeWorker() {
+        await that.$http
+          .delete('admin/order', {
+            params: {
+              fixTableId: that.fixTableId
+            }
+          })
+          .then(response => {
+            if (response.data.code === 204) {
+              return that.$message.error('删除订单失败')
+            }
+            that.$message.success('删除订单成功')
+          })
+      }
+      seeWorker()
+    },
+    // 界面内移除订单函数
+    deleteRow(index, rows) {
+      rows.splice(index, 1)
+    },
+    // 拉取订单
+    getOrder() {
+      const that = this
+      async function getOrder() {
+        await that.$http.get('admin/order-list').then(response => {
+          if (response.data.code !== 200) {
+            return that.$message.error('拉取失败')
+          }
+          that.$message.success('拉取订单成功')
+          that.orders = response.data.data
+          that.total = response.data.data.length
+        })
+      }
+      getOrder()
+    },
+    // 获取订单详情
+    getOrderDetails(row) {
+      const that = this
+      async function getOrderDetails() {
+       await that.$http
+          .get('admin/order', {
+            params: {
+              fixTableId: that.fixTableId
+            }
+          })
+          .then(response => {
+              that.$message.success('拉取订单详情成功')
+              // 开始时间
+                  var date = new Date(response.data.data.createdTime)
+                  var year = date.getFullYear() + '-'
+                  var month = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-'
+                  var dates = date.getDate() + ' '
+                  var hour = date.getHours() + ':'
+                  var min = date.getMinutes() + ':'
+                  var second = date.getSeconds()
+                  // 结束时间
+                  var Edate = new Date(response.data.data.endTime)
+                  var Eyear = Edate.getFullYear() + '-'
+                  var Emonth = (Edate.getMonth() + 1 < 10 ? '0' + (Edate.getMonth() + 1) : Edate.getMonth() + 1) + '-'
+                  var Edates = Edate.getDate() + ' '
+                  var Ehour = Edate.getHours() + ':'
+                  var Emin = Edate.getMinutes() + ':'
+                  var Esecond = Edate.getSeconds()
+              that.orderDertails = response.data.data
+              that.orderDertails.createdTime = year + month + dates + hour + min + second
+              that.orderDertails.endTime = Eyear + Emonth + Edates + Ehour + Emin + Esecond
+          })
+          .catch(() => {
+             return that.$message.error('请再点一次哦')
+          })
+      }
+      getOrderDetails()
+    },
+    // 获取工人列表
+    getWorker() {
+      const that = this
+      async function seeWorker() {
+        await that.$http.get('admin/select-worker').then(response => {
+          if (response.data.code !== 200) {
+            return that.$message.error('拉取工人失败')
+          }
+          that.$message.success('拉取工人成功')
+          that.workerData = response.data.data
+        })
+      }
+      seeWorker()
+    },
+    // 选择工人
+    commitWorker() {
+      const that = this
+      async function seeWorker() {
+        await that.$http
+          .patch('admin/select-worker', {
+            workId: that.workerId,
+            fixTableId: that.fixTableId
+          })
+          .then(response => {
+            that.$message.success('选择工人成功')
+          })
+          .catch(() => {
+            return that.$message.error('没选择到工人噢')
+          })
+      }
+      seeWorker()
+    },
+    // 拉取订单函数
+    handleCurrentChange() {
+      const that = this
+      async function getOrder() {
+        await that.$http.get('admin/order-list').then(response => {
+          if (response.data.code !== 200) {
+            return that.$message.error('拉取失败')
+          }
+          that.$message.success('拉取订单成功')
+          that.orders = response.data.data
+        })
+      }
+      getOrder()
+    }
+  }
+
+}
 </script>
 
 <style scoped>
 #p {
-    margin-top: 0;
+  margin-top: 0;
 }
-#orderItem{
-    list-style-type: none
+.btn {
+  display: block;
+  margin: 0 auto;
+  float: left;
 }
-.btn{
-    display: block;
-    margin: 0 auto;
-    float: left;
-}
-.collapse{
-    background-color: white;
-     width: 50%;
-}
-el-collapse-item{
-    float: left;
-}
-.h6{
-    margin: 0 auto;
+.el-table .warning-row {
+    background: yellow;
+  }
 
-}
-/* 这里是修改点击处的颜色，别的属性不要添加 */
-.test2 >>> .el-collapse-item__header {
-    background-color: blanchedalmond;
-}
-/* 这里是修改内容处的颜色，别的属性不要添加 */
-.test2 >>> .el-collapse-item__content {
-    background-color: violet;
-}
-#right{
-    float: right;
-    background-color: blue;
-}
+  .el-table .success-row {
+    background: red;
+  }
 </style>
-TODO: 弹窗功能已经实现，把对应的状态配置好
-TODO:想办法实现翻页功能

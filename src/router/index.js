@@ -27,7 +27,7 @@ const routes = [
     // 管理员路由注册
     path: '/admin',
     component: AdHome,
-    // 这里有个坑，就是子路由的地址前面不要写 /
+    // 这里有个坑，就是子路由的地址前面不要写
     children: [
       {
         path: 'Info',
