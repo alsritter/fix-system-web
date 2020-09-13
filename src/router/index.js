@@ -18,6 +18,10 @@ import Announcement from '../components/admin/Announcement.vue'
 import StudentLogin from '@/components/student/StudentLogin'
 import StudentSignUp from '../components/student/SignUp.vue'
 import StudentHome from '@/components/student/StudentHome'
+import UpdateUser from '../components/student/UpdateUser.vue'
+import CallUp from '../components/student/CallUp.vue'
+import MyOrder from '../components/student/MyOrder.vue'
+import OrderList from '../components/student/OrderList.vue'
 
 Vue.use(VueRouter)
 const routes = [
@@ -29,39 +33,29 @@ const routes = [
     // 管理员路由注册
     path: '/admin',
     component: AdHome,
+    // 这个坑有点神奇，要有子路由必须先重定向到某个子路由里
+    redirect: '/admin/Order',
     // 这里有个坑，就是子路由的地址前面不要写 /
     children: [
-      {
-        path: 'Info',
-        component: Info
-      }, {
-        path: 'Order',
-        component: Order
-      }, {
-        path: 'WorkerManage',
-        component: WorkerManage
-      }, {
-        path: 'SelfCenter',
-        component: SelfCenter
-      }, {
-        path: 'Statistics',
-        component: Statistics
-      }, {
-        path: 'Student',
-        component: Student
-      }, {
-        path: 'Tools',
-        component: Tools
-      }, {
-        path: 'Announcement',
-        component: Announcement
-      }
+      { path: 'Info', component: Info },
+      { path: 'Order', component: Order },
+      { path: 'WorkerManage', component: WorkerManage },
+      { path: 'SelfCenter', component: SelfCenter },
+      { path: 'Statistics', component: Statistics },
+      { path: 'Student', component: Student },
+      { path: 'Tools', component: Tools },
+      { path: 'Announcement', component: Announcement }
     ]
   },
   {
     path: '/student',
     component: StudentHome,
+    redirect: '/student/updateUser',
     children: [
+      { path: 'updateUser', component: UpdateUser },
+      { path: 'callUp', component: CallUp },
+      { path: 'myOrder', component: MyOrder },
+      { path: 'orederList', component: OrderList }
     ]
   }
 ]
