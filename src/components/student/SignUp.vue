@@ -10,7 +10,7 @@
     </div>
 
     <div class='signUp_box'>
-      <el-form :model='signUpForm' class='login_form' ref='signUpFormRef' :rules='signUpFormRules'>
+      <el-form :model='signUpForm' class='signUp_form' ref='signUpFormRef' :rules='signUpFormRules'>
         <!-- 用户 id -->
         <el-form-item label-width='0px' prop='userID'>
           <el-input
@@ -105,8 +105,7 @@ export default {
           {
             required: true,
             message: '不要空着噢',
-            trigger: 'blur',
-            type: 'number'
+            trigger: 'blur'
           },
           { validator: this.isExist, trigger: 'blur' }
         ],
@@ -306,7 +305,7 @@ export default {
   height: 70%;
   position: absolute;
   bottom: 0%;
-  .login_form {
+  .signUp_form {
     bottom: 0;
     width: 80%;
     height: 100%;

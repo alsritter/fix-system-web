@@ -5,14 +5,7 @@
       <li :class='[menuIcon,"fold_menu_icon"]' @click='menuButton()'></li>
     </el-header>
     <el-aside :class='{isNone:isfoldAside}'>
-      <el-menu
-        class='el-menu-vertical-demo'
-        @open='handleOpen'
-        @close='handleClose'
-        @select='select'
-        :collapse='isfold'
-        router
-      >
+      <el-menu class='el-menu-vertical-demo' @select='select' :collapse='isfold' router>
         <el-menu-item index='updateUser'>
           <i class='el-icon-user-solid'></i>
           <span slot='title'>修改个人资料</span>
@@ -29,6 +22,10 @@
           <i class='el-icon-s-claim'></i>
           <span slot='title'>历史订单</span>
         </el-menu-item>
+        <el-menu-item @click='signOut()'>
+          <i class='el-icon-error'></i>
+          <span slot='title'>退出登陆</span>
+        </el-menu-item>
       </el-menu>
     </el-aside>
     <el-main>
@@ -40,11 +37,9 @@
 <script>
 export default {
   methods: {
-    handleOpen(key, keyPath) {
-      console.log(key, keyPath)
-    },
-    handleClose(key, keyPath) {
-      console.log(key, keyPath)
+    signOut() {
+      window.localStorage.clear()
+      this.$router.push('login')
     },
     async menuButton() {
       this.isfold = !this.isfold

@@ -75,7 +75,6 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   // from 当前导航正要离开的路由
   // to 即将要进入的目标 路由对象
-  console.log(to.path)
 
   if (to.path === '/') return next()
   // 几个特殊的路由运行通过就好了
@@ -95,7 +94,6 @@ router.beforeEach((to, from, next) => {
 // 这一步需要获取指定的 Token
 axios.interceptors.request.use(config => {
   const pathStr = config.url.substring(0, config.url.substr(1).indexOf('/') + 1)
-  console.log('当前请求路径根为：' + pathStr)
   if (pathStr === 'util') { return config }
   config.headers.Authorization = window.localStorage.getItem(`${pathStr}-token`)
   return config
