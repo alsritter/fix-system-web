@@ -108,7 +108,7 @@ export default {
 
         // 发起axios请求
         await that.$http
-          .post('student/login', {
+          .post('/student/login', {
             studentId: that.loginForm.userID, // 表单参数 3个
             password: that.loginForm.password,
             codevalue: that.loginForm.Ucode,
@@ -211,26 +211,31 @@ export default {
     }
   }
 
+  .btns /deep/ .el-form-item__content {
+    height: 100%;
+  }
+
   .btns {
     margin-bottom: 5px;
     height: 230px;
     width: 100%;
     position: relative;
+
     .el-button {
       position: absolute;
       transform: translate(-50%, 0);
-      left: 50%;
       width: 300px;
       height: 50px;
       background-color: white;
       color: #4e43f9;
-      bottom: 15%;
+      bottom: 0%;
       box-shadow: 0 5px 5px rgba(56, 56, 56, 0.397);
     }
   }
 
   .text-link {
     .el-link {
+      margin-top: 10px;
       transform: translate(-50%, -50%);
       color: white;
     }

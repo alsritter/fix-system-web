@@ -6,21 +6,6 @@ html, body, #app {
     min-width: 100%;
 }
 
-/* 登陆页的输入框样式 */
-.student-login .el-input__inner {
-    height: 60px;
-    background-color: #ffffff33 !important;
-    border: 1px solid #dcdfe600;
-    /* 字体颜色 */
-    color: #fff;
-}
-/* 学生登陆页的错误提示 */
-.login_box .el-form-item__error {
-    color: #d60d0d;
-    font-size: 10px;
-    padding-top: 0;
-    font-size: 5px;
-}
 /* 订单页面的颜色 */
   .el-table .warning-row {
     background: rgb(250, 208, 215);

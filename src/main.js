@@ -28,6 +28,7 @@ axios.interceptors.request.use((config) => {
 }, (error) => {
     return Promise.reject(error)
 })
+
 // vue相关配置
 Vue.use(ElementUI)
 Vue.config.productionTip = false

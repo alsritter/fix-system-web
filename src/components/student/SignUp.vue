@@ -223,7 +223,7 @@ export default {
 
         // 发起axios请求
         await that.$http
-          .post('student/sign-up', {
+          .post('/student/sign-up', {
             studentId: that.signUpForm.userID, // 表单参数 3个
             password: that.signUpForm.password,
             codevalue: that.signUpForm.Ucode,
@@ -330,6 +330,10 @@ export default {
     }
   }
 
+  .btns /deep/ .el-form-item__content {
+    height: 100%;
+  }
+
   .btns {
     margin-bottom: 5px;
     height: 10%;
@@ -338,7 +342,6 @@ export default {
     .el-button {
       position: absolute;
       transform: translate(-50%, 0);
-      left: 50%;
       width: 300px;
       height: 50px;
       background-color: white;

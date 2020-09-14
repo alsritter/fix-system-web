@@ -62,7 +62,7 @@ export default {
   methods: {
     signOut() {
       window.localStorage.clear()
-      this.$router.push('Login')
+      this.$router.push('login')
     },
     toInfo() {
        //       this.$router.push('Info')
