@@ -14,4 +14,7 @@ html, body, #app {
   .el-table .success-row {
     background: #f0f9eb;
   }
-  
+  .el-table tbody tr:hover>td {
+    background-color:#0000!important
+}
+ 

@@ -4,10 +4,14 @@
       <el-table
         :data='orders.slice((currentPage-1)*pagesize,currentPage*pagesize)'
         style='width: 100%'
-        :default-sort='{prop: "createdTime", order: "descending"}'
+        :default-sort='{prop: "state", order: "ascending"}'
         @row-click='getorderId'
         @cell-mouse-enter='getorderId'
         :row-class-name='tableRowClassName'
+        v-loading='loading'
+        element-loading-text='拼命加载中'
+        element-loading-spinner='el-icon-loading'
+        element-loading-background='rgba(0, 0, 0, 0.8)'
       >
         <!-- 大表格内容 -->
         <el-table-column prop='fixTableId' label='单号' width='180' sortable></el-table-column>
@@ -18,7 +22,7 @@
         <el-table-column prop='contacts' label='联系人'></el-table-column>
         <el-table-column prop='phone' label='电话'></el-table-column>
         <el-table-column prop='state' label='状态' sortable :formatter='statusFormat'></el-table-column>
-        <el-table-column fixed='right' label='操作' width='120'>
+        <el-table-column label='操作'>
           <!-- 按钮 -->
           <template slot-scope='scope'>
             <el-button
@@ -48,8 +52,7 @@
             >查看详情</el-button>
             <el-button
               @click.native.prevent='
-                            deleteRow(scope.$index, orders) ;
-                            removeOrder(scope.$fixTableId)  ;'
+                            removeOrder(scope.$index, orders)'
               v-if='scope.row.state != 2'
               type='text'
               size='small'
@@ -80,7 +83,6 @@
                   <el-table
                     ref='singleTable'
                     :data='workerData'
-                    highlight-current-row
                     style='width: 100%'
                     @row-click='getworkerId'
                     max-height='250'
@@ -99,7 +101,7 @@
                 </span>
                 <span slot='footer' class='dialog-footer'>
                   <el-button @click='selectWorker = false'>取 消</el-button>
-                  <el-button type='primary' @click='selectWorker = false'>确 定</el-button>
+                  <!-- <el-button type='primary' @click='selectWorker = false'>确 定</el-button> -->
                 </span>
               </el-dialog>
               <!-- 进行中 -->
@@ -230,13 +232,13 @@ export default {
       changeWorker: false,
       seeDetails: false,
       // 订单详情
-      orderDertails: {}
+      orderDertails: {},
+      loading: true
     }
   },
   methods: {
     // 显示订单状态颜色的函数
     tableRowClassName({ row }) {
-      console.log(row.state)
       if (row.state === 0) {
         return 'warning-row'
       } else if (row.state === 1) {
@@ -286,37 +288,52 @@ export default {
     // 获取订单 ID 函数
     getorderId(row) {
       this.fixTableId = row.fixTableId
-      console.log('单号' + this.fixTableId)
+      // console.log('单号' + this.fixTableId)
     },
     // 获取工人ID函数
     getworkerId(row) {
       this.workerId = row.id
-      console.log('工号' + this.workerId)
+      // console.log('工号' + this.workerId)
     },
     // 取消订单
-    removeOrder() {
-      const that = this
-      // const orderId = localStorage.getItem('orderId')
-      async function seeWorker() {
-        await that.$http
-          .delete('admin/order', {
-            params: {
-              fixTableId: that.fixTableId
-            }
+    removeOrder(index, rows) {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          rows.splice(index, 1)
+          const that = this
+          async function seeWorker() {
+            await that.$http
+              .delete('admin/order', {
+                params: {
+                  fixTableId: that.fixTableId
+                }
+              })
+              .then(response => {
+                if (response.data.code === 204) {
+                  return that.$message.error('删除订单失败')
+                }
+                that.$message.success('删除订单成功')
+              })
+          }
+          seeWorker()
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
           })
-          .then(response => {
-            that.$message.success('删除订单成功')
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
           })
-          .catch(() => {
-            return that.$message.error('删除订单失败')
-          })
-      }
-      seeWorker()
+        })
     },
     // 界面内移除订单函数
-    deleteRow(index, rows) {
-      rows.splice(index, 1)
-    },
+    deleteRow(index, rows) {},
     // 拉取订单
     getOrder() {
       const that = this
@@ -326,6 +343,14 @@ export default {
           .then(response => {
             that.orders = response.data.data
             that.total = response.data.data.length
+            that.loading = false
+            that.$message.success('拉取订单成功')
+            var byState = response.data.data.slice(0)
+            byState.sort(function (a, b) {
+              return a.state - b.state
+            })
+            that.orders = byState
+            that.total = byState.length
           })
           .catch(() => {
             return that.$message.error('拉取失败')
@@ -406,6 +431,7 @@ export default {
           })
           .then(response => {
             that.$message.success('选择工人成功')
+            location.reload()
           })
           .catch(() => {
             return that.$message.error('没选择到工人噢')
@@ -441,12 +467,5 @@ export default {
   display: block;
   margin: 0 auto;
   float: left;
-}
-.el-table .warning-row {
-  background: yellow;
-}
-
-.el-table .success-row {
-  background: red;
 }
 </style>
