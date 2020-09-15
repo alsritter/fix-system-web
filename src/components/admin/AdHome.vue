@@ -3,9 +3,9 @@
   <el-container class="home-container">
     <el-aside>
       <el-col :span="12">
-        <h3 @click="toSelfCenter">管理员</h3>
+        <el-button type="text" @click="toSelfCenter">管理员</el-button>
         <el-menu
-          default-active="2"
+          default-active="Order"
           text-color="#ffffff"
           active-color="#ff80aa"
           background-color="#0000"
@@ -41,7 +41,11 @@
             <i class="el-icon-data-analysis"></i>
             <span slot="title" id="sub7" @click="toAnnouncement">发布公告</span>
           </el-menu-item>
-          <el-menu-item index="9">
+          <el-menu-item index="WorkerRegister">
+            <i class="el-icon-data-analysis"></i>
+            <span slot="title" id="sub7" @click="toAnnouncement">录入工人</span>
+          </el-menu-item>
+          <el-menu-item index="Login">
              <el-button @click="signOut">退出登录</el-button>
           </el-menu-item>
         </el-menu>

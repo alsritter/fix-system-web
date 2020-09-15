@@ -14,6 +14,8 @@ import Statistics from '@/components/admin/Statistics'
 import Student from '@/components/admin/Student'
 import Tools from '@/components/admin/Tools'
 import Announcement from '../components/admin/Announcement.vue'
+import WorkerRegister from '../components/admin/WorkerRegister.vue'
+import ImployeeDetails from '../components/admin/ImployeeDetail.vue'
 // 学生页面
 import StudentLogin from '@/components/student/StudentLogin'
 import StudentSignUp from '../components/student/SignUp.vue'
@@ -39,12 +41,19 @@ const routes = [
     children: [
       { path: 'Info', component: Info },
       { path: 'Order', component: Order },
-      { path: 'WorkerManage', component: WorkerManage },
+      {
+        path: 'WorkerManage',
+        component: WorkerManage,
+        children: [
+        { path: 'ImployeeDetails', component: ImployeeDetails }
+      ]
+      },
       { path: 'SelfCenter', component: SelfCenter },
       { path: 'Statistics', component: Statistics },
       { path: 'Student', component: Student },
       { path: 'Tools', component: Tools },
-      { path: 'Announcement', component: Announcement }
+      { path: 'Announcement', component: Announcement },
+      { path: 'WorkerRegister', component: WorkerRegister }
     ]
   },
   {

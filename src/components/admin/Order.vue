@@ -4,23 +4,25 @@
       <el-table
         :data='orders.slice((currentPage-1)*pagesize,currentPage*pagesize)'
         style='width: 100%'
-        :default-sort='{prop: "createdTime", order: "descending"}'
-        @row-click="getorderId"
-        @cell-mouse-enter="getorderId"
-        :row-class-name="tableRowClassName"
+        :default-sort='{prop: "state", order: "ascending"}'
+        @row-click='getorderId'
+        @cell-mouse-enter='getorderId'
+        :row-class-name='tableRowClassName'
+         v-loading="loading"
+    element-loading-text="拼命加载中"
+    element-loading-spinner="el-icon-loading"
+    element-loading-background="rgba(0, 0, 0, 0.8)"
       >
-      <!-- 大表格内容 -->
+        <!-- 大表格内容 -->
         <el-table-column prop='fixTableId' label='单号' width='180' sortable></el-table-column>
         <el-table-column prop='studentId' label='学生号' width='180'></el-table-column>
         <el-table-column prop='address' label='地址'></el-table-column>
-        <el-table-column prop='createdTime' label='创建时间'
-        sortable :formatter="dateFormat"></el-table-column>
+        <el-table-column prop='createdTime' label='创建时间' sortable :formatter='dateFormat'></el-table-column>
         <el-table-column prop='faultClass' label='报修类型'></el-table-column>
         <el-table-column prop='contacts' label='联系人'></el-table-column>
         <el-table-column prop='phone' label='电话'></el-table-column>
-        <el-table-column prop='state' label='状态'
-        sortable :formatter="statusFormat"></el-table-column>
-        <el-table-column fixed='right' label='操作' width='120'>
+        <el-table-column prop='state' label='状态' sortable :formatter='statusFormat'></el-table-column>
+        <el-table-column label='操作'>
           <!-- 按钮 -->
           <template slot-scope='scope'>
             <el-button
@@ -50,13 +52,12 @@
             >查看详情</el-button>
             <el-button
               @click.native.prevent='
-                            deleteRow(scope.$index, orders) ;
-                            removeOrder(scope.$fixTableId)  ;'
+                            removeOrder(scope.$index, orders)'
               v-if='scope.row.state != 2'
               type='text'
               size='small'
             >移除</el-button>
-             <!-- 弹窗内容 -->
+            <!-- 弹窗内容 -->
             <div>
               <!-- 待处理 -->
               <el-dialog
@@ -82,11 +83,10 @@
                   <el-table
                     ref='singleTable'
                     :data='workerData'
-                    highlight-current-row
                     style='width: 100%'
                     @row-click='getworkerId'
                     max-height='250'
-                    @cell-mouse-enter="getworkerId"
+                    @cell-mouse-enter='getworkerId'
                   >
                     <el-table-column property='gender' label='性别' width='50'></el-table-column>
                     <el-table-column property='id' label='工号' width='120'></el-table-column>
@@ -101,7 +101,7 @@
                 </span>
                 <span slot='footer' class='dialog-footer'>
                   <el-button @click='selectWorker = false'>取 消</el-button>
-                  <el-button type='primary' @click='selectWorker = false'>确 定</el-button>
+                  <!-- <el-button type='primary' @click='selectWorker = false'>确 定</el-button> -->
                 </span>
               </el-dialog>
               <!-- 进行中 -->
@@ -123,8 +123,7 @@
                 width='70%'
                 :append-to-body='true'
               >
-                <span>
-                </span>
+                <span></span>
                 <span slot='footer' class='dialog-footer'>
                   <el-button @click='changeWorker = false'>取 消</el-button>
                   <el-button type='primary' @click='changeWorker = false'>确 定</el-button>
@@ -144,33 +143,40 @@
                 </span>
               </el-dialog>
               <!-- 查看详情 -->
-              <el-dialog
-                title='问题描述'
-                :visible.sync='seeDetails'
-                width='70%'
-                :append-to-body='true'
-              >
+              <el-dialog title='问题描述' :visible.sync='seeDetails' width='70%' :append-to-body='true'>
                 <span>
-                  单号{{orderDertails.fixTableId}}<br>
-                  学生号{{orderDertails.studentId}}<br>
-                  联系人{{orderDertails.contacts}}<br>
-                  地址{{orderDertails.address}}<br>
-                  创建时间{{orderDertails.createdTime}}<br>
-                  完成时间{{orderDertails.endTime}}<br>
-                  电话{{orderDertails.phone}}<br>
-                  报修类型{{orderDertails.faultClass}}<br>
-                  报修描述{{orderDertails.faultDetail}}<br>
-                  工人工号{{orderDertails.workId}}<br>
-                  处理结果{{orderDertails.resultDetails}}<br>
-                  消息{{orderDertails.massage}}<br>
+                  单号{{orderDertails.fixTableId}}
+                  <br />
+                  学生号{{orderDertails.studentId}}
+                  <br />
+                  联系人{{orderDertails.contacts}}
+                  <br />
+                  地址{{orderDertails.address}}
+                  <br />
+                  创建时间{{orderDertails.createdTime}}
+                  <br />
+                  完成时间{{orderDertails.endTime}}
+                  <br />
+                  电话{{orderDertails.phone}}
+                  <br />
+                  报修类型{{orderDertails.faultClass}}
+                  <br />
+                  报修描述{{orderDertails.faultDetail}}
+                  <br />
+                  工人工号{{orderDertails.workId}}
+                  <br />
+                  处理结果{{orderDertails.resultDetails}}
+                  <br />
+                  消息{{orderDertails.massage}}
+                  <br />
                   <!-- 评分 -->
                   <el-rate
-                    v-model="value"
+                    v-model='value'
                     disabled
                     show-score
-                    text-color="#ff9900"
-                    score-template="{value}">
-                  </el-rate>
+                    text-color='#ff9900'
+                    score-template='{value}'
+                  ></el-rate>
                 </span>
                 <span slot='footer' class='dialog-footer'>
                   <el-button @click='seeDetails = false'>取 消</el-button>
@@ -226,44 +232,44 @@ export default {
       changeWorker: false,
       seeDetails: false,
       // 订单详情
-      orderDertails: {}
+      orderDertails: {},
+      loading: true
     }
   },
   methods: {
     // 显示订单状态颜色的函数
     tableRowClassName({ row }) {
-      console.log(row.state)
-        if (row.state === 0) {
-          return 'warning-row'
-        } else if (row.state === 1) {
-          return 'success-row'
-        } else if (row.state === 2) {
-          return ''
-        }
+      if (row.state === 0) {
+        return 'warning-row'
+      } else if (row.state === 1) {
+        return 'success-row'
+      } else if (row.state === 2) {
         return ''
-      },
+      }
+      return ''
+    },
     // 表格处理时间的函数
-     dateFormat: function(row, column) {
-         var date = row[column.property]
-         if (date === undefined) {
-                    return ''
-                }
-                return moment(date).format('YYYY-MM-DD HH:mm:ss')
-     },
-     // 格式化状态
-     statusFormat: function(row, column) {
-         var state = row[column.property]
-         if (state === 0) {
-                    return '待处理'
-          } else if (state === 1) {
-              return '进行中'
-          } else if (state === 2) {
-              return '已完成'
-          }
-     },
+    dateFormat: function (row, column) {
+      var date = row[column.property]
+      if (date === undefined) {
+        return ''
+      }
+      return moment(date).format('YYYY-MM-DD HH:mm:ss')
+    },
+    // 格式化状态
+    statusFormat: function (row, column) {
+      var state = row[column.property]
+      if (state === 0) {
+        return '待处理'
+      } else if (state === 1) {
+        return '进行中'
+      } else if (state === 2) {
+        return '已完成'
+      }
+    },
     // 保存评分到model层
     sentValue(row) {
-        this.value = row.grade / 2
+      this.value = row.grade / 2
     },
     // 获取问题描述的3个方法
     getDetails0(row) {
@@ -280,39 +286,54 @@ export default {
       this.currentPage = currentPage
     },
     // 获取订单 ID 函数
-     getorderId(row) {
+    getorderId(row) {
       this.fixTableId = row.fixTableId
-      console.log('单号' + this.fixTableId)
+      // console.log('单号' + this.fixTableId)
     },
     // 获取工人ID函数
     getworkerId(row) {
       this.workerId = row.id
-      console.log('工号' + this.workerId)
+      // console.log('工号' + this.workerId)
     },
     // 取消订单
-    removeOrder() {
-      const that = this
-      // const orderId = localStorage.getItem('orderId')
-      async function seeWorker() {
-        await that.$http
-          .delete('admin/order', {
-            params: {
-              fixTableId: that.fixTableId
-            }
+    removeOrder(index, rows) {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          rows.splice(index, 1)
+          const that = this
+          async function seeWorker() {
+            await that.$http
+              .delete('admin/order', {
+                params: {
+                  fixTableId: that.fixTableId
+                }
+              })
+              .then(response => {
+                if (response.data.code === 204) {
+                  return that.$message.error('删除订单失败')
+                }
+                that.$message.success('删除订单成功')
+              })
+          }
+          seeWorker()
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
           })
-          .then(response => {
-            if (response.data.code === 204) {
-              return that.$message.error('删除订单失败')
-            }
-            that.$message.success('删除订单成功')
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
           })
-      }
-      seeWorker()
+        })
     },
     // 界面内移除订单函数
-    deleteRow(index, rows) {
-      rows.splice(index, 1)
-    },
+    deleteRow(index, rows) {},
     // 拉取订单
     getOrder() {
       const that = this
@@ -321,9 +342,14 @@ export default {
           if (response.data.code !== 200) {
             return that.$message.error('拉取失败')
           }
+          that.loading = false
           that.$message.success('拉取订单成功')
-          that.orders = response.data.data
-          that.total = response.data.data.length
+          var byState = response.data.data.slice(0)
+          byState.sort(function (a, b) {
+            return a.state - b.state
+          })
+          that.orders = byState
+          that.total = byState.length
         })
       }
       getOrder()
@@ -332,36 +358,44 @@ export default {
     getOrderDetails(row) {
       const that = this
       async function getOrderDetails() {
-       await that.$http
+        await that.$http
           .get('admin/order', {
             params: {
               fixTableId: that.fixTableId
             }
           })
           .then(response => {
-              that.$message.success('拉取订单详情成功')
-              // 开始时间
-                  var date = new Date(response.data.data.createdTime)
-                  var year = date.getFullYear() + '-'
-                  var month = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-'
-                  var dates = date.getDate() + ' '
-                  var hour = date.getHours() + ':'
-                  var min = date.getMinutes() + ':'
-                  var second = date.getSeconds()
-                  // 结束时间
-                  var Edate = new Date(response.data.data.endTime)
-                  var Eyear = Edate.getFullYear() + '-'
-                  var Emonth = (Edate.getMonth() + 1 < 10 ? '0' + (Edate.getMonth() + 1) : Edate.getMonth() + 1) + '-'
-                  var Edates = Edate.getDate() + ' '
-                  var Ehour = Edate.getHours() + ':'
-                  var Emin = Edate.getMinutes() + ':'
-                  var Esecond = Edate.getSeconds()
-              that.orderDertails = response.data.data
-              that.orderDertails.createdTime = year + month + dates + hour + min + second
-              that.orderDertails.endTime = Eyear + Emonth + Edates + Ehour + Emin + Esecond
+            that.$message.success('拉取订单详情成功')
+            // 开始时间
+            var date = new Date(response.data.data.createdTime)
+            var year = date.getFullYear() + '-'
+            var month =
+              (date.getMonth() + 1 < 10
+                ? '0' + (date.getMonth() + 1)
+                : date.getMonth() + 1) + '-'
+            var dates = date.getDate() + ' '
+            var hour = date.getHours() + ':'
+            var min = date.getMinutes() + ':'
+            var second = date.getSeconds()
+            // 结束时间
+            var Edate = new Date(response.data.data.endTime)
+            var Eyear = Edate.getFullYear() + '-'
+            var Emonth =
+              (Edate.getMonth() + 1 < 10
+                ? '0' + (Edate.getMonth() + 1)
+                : Edate.getMonth() + 1) + '-'
+            var Edates = Edate.getDate() + ' '
+            var Ehour = Edate.getHours() + ':'
+            var Emin = Edate.getMinutes() + ':'
+            var Esecond = Edate.getSeconds()
+            that.orderDertails = response.data.data
+            that.orderDertails.createdTime =
+              year + month + dates + hour + min + second
+            that.orderDertails.endTime =
+              Eyear + Emonth + Edates + Ehour + Emin + Esecond
           })
           .catch(() => {
-             return that.$message.error('请再点一次哦')
+            return that.$message.error('请再点一次哦')
           })
       }
       getOrderDetails()
@@ -391,6 +425,7 @@ export default {
           })
           .then(response => {
             that.$message.success('选择工人成功')
+            location.reload()
           })
           .catch(() => {
             return that.$message.error('没选择到工人噢')
@@ -413,7 +448,6 @@ export default {
       getOrder()
     }
   }
-
 }
 </script>
 
@@ -426,11 +460,4 @@ export default {
   margin: 0 auto;
   float: left;
 }
-.el-table .warning-row {
-    background: yellow;
-  }
-
-  .el-table .success-row {
-    background: red;
-  }
 </style>
