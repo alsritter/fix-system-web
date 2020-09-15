@@ -167,7 +167,7 @@
                   <br />
                   处理结果{{orderDertails.resultDetails}}
                   <br />
-                  消息{{orderDertails.massage}}
+                  消息{{orderDertails.message}}
                   <br />
                   <!-- 评分 -->
                   <el-rate

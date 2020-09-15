@@ -46,11 +46,15 @@ export default {
       .get('student/order')
       .then(res => {
         this.orderList = res.data.data
-        console.log(this.orderList)
         // 再排序一下数组（正在处理的状态置顶）
         this.orderList.sort((a, b) => {
           return b.state - a.state
         })
+
+        // 处理下时间格式
+        for (const item of this.orderList) {
+          item.createdTime = this.getLocalTime(item.createdTime)
+        }
       })
       .catch(() => {
         return this.$message.error('获取订单列表失败')
@@ -102,6 +106,9 @@ export default {
       }
 
       this.dialogVisible = true
+    },
+    getLocalTime(nS) {
+      return new Date(parseInt(nS)).toLocaleString().replace(/:\d{1,2}$/, ' ')
     }
   }
 }
