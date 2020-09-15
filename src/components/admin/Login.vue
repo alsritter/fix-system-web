@@ -50,10 +50,7 @@
             </el-form-item>
             <!--按钮-->
             <el-form-item class='btns'>
-              <el-button
-                type='primary'
-                @click='loginValidate'
-              >登录</el-button>
+              <el-button type='primary' @click='loginValidate'>登录</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -129,7 +126,6 @@ export default {
             uuid: uid // 时间戳参数
           })
           .then(res => {
-            if (res.data.code !== 200) return that.$message.error('登录失败')
             that.$message.success('登录成功')
             window.localStorage.setItem('admin-token', res.data.data.token)
             this.$router.push('SelfCenter')
@@ -185,7 +181,7 @@ export default {
   border-radius: 10px;
 }
 
-.btns /deep/ .el-button{
+.btns /deep/ .el-button {
   // border-style : none;
   box-shadow: 0 2px 5px rgba(56, 56, 56, 0.397);
   // background-color: #e8bd65;

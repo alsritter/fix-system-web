@@ -115,7 +115,7 @@ export default {
             uuid: uid // 时间戳参数
           })
           .then(res => {
-            that.$message.success('登录成功')
+            that.$message.success({ message: '登录成功', duration: 500 })
             // 更换为笑脸
             that.stateColor = 'rgb(129 228 100)'
             that.headIcon = 'icon-zhayan'

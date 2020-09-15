@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import axios from 'axios'
+// 单独引入消息组件
+import { Message } from 'element-ui'
 // 根页面，用来选择是哪种用户
 import Root from '../components/Root.vue'
 // 管理员页面
@@ -97,6 +99,21 @@ axios.interceptors.request.use(config => {
   if (pathStr === 'util') { return config }
   config.headers.Authorization = window.localStorage.getItem(`${pathStr}-token`)
   return config
+})
+
+// 拦截到 401 Token 错误就返回登陆
+axios.interceptors.response.use(response => {
+  return response
+}, async error => {
+  // 对响应错误做处理
+  if (error.response.data.code === 401) {
+    // Vue.$message.error
+    Message.error('登录过期了，请重新登陆')
+    const pathStr = error.response.config.url.substring(0, error.response.config.url.substr(1).indexOf('/') + 1)
+    router.push(`/${pathStr}/login`)
+  } else {
+    return Promise.reject(error)
+  }
 })
 export default router
 // TODO:等待学生端实现，合并分支后需要调整路由注册规则
