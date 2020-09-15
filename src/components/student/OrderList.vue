@@ -43,9 +43,6 @@
           别有千金笑，来映九枝前。
         </span>
       </div>
-      <span slot='footer' class='dialog-footer'>
-        <el-button type='primary' @click='dialogVisible = false'>确 定</el-button>
-      </span>
     </el-dialog>
   </div>
 </template>
@@ -93,11 +90,6 @@ export default {
     span:last-child {
       color: rgb(129, 129, 129);
     }
-  }
-
-  .el-dialog__footer {
-    padding: 10px 0px 20px;
-    text-align: center;
   }
 }
 

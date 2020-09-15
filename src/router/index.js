@@ -68,29 +68,43 @@ const routes = [
     ]
   }
 ]
+
+// 重写下 Router 原型链上的 push、replace 方法
+// 拦截器的重定向会和上面子路由的重定向引起 vue-router 报错
+const originalPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push(location, onResolve, onReject) {
+  if (onResolve || onReject) return originalPush.call(this, location, onResolve, onReject)
+  return originalPush.call(this, location).catch(err => err)
+}
+
 const router = new VueRouter({
   routes: routes
 })
 
 router.beforeEach((to, from, next) => {
+  // from 当前导航正要离开的路由
+  // to 即将要进入的目标 路由对象
+
+  if (to.path === '/') return next()
+  // 几个特殊的路由运行通过就好了
+  if (to.path === '/admin/login') return next()
+  if (to.path === '/student/login') return next()
+  if (to.path === '/student/signUp') return next()
+  if (to.path === '/utils/**') return next()
+
+  // 先截取路径前缀（动态获取根路径）
+  const pathStr = to.path.substring(1, to.path.substr(1).indexOf('/') + 1)
+  // 获取token
+  const tokenStr = window.localStorage.getItem(`${pathStr}-token`)
+  if (!tokenStr) return next(`/${pathStr}/login`)
   next()
-  // if (to.path === '/') return next()
-  // // 几个特殊的路由运行通过就好了
-  // if (to.path === '/admin/Login') return next()
-  // if (to.path === '/student/Login') return next()
-
-  // // 先截取路径前缀（动态获取根路径）
-  // const pathStr = to.path.substring(1, to.path.substr(1).indexOf('/') + 1)
-
-  // console.log('根路径为：' + pathStr)
-
-  // // 获取token
-  // const tokenStr = window.localStorage.getItem('token')
-  // if (!tokenStr) return next(`/${pathStr}/Login`)
-  // next()
 })
+
+// 这一步需要获取指定的 Token
 axios.interceptors.request.use(config => {
-  config.headers.Authorization = window.localStorage.getItem('admin-token')
+  const pathStr = config.url.substring(0, config.url.substr(1).indexOf('/') + 1)
+  if (pathStr === 'util') { return config }
+  config.headers.Authorization = window.localStorage.getItem(`${pathStr}-token`)
   return config
 })
 export default router

@@ -1,6 +1,15 @@
 <template>
-  <el-form ref='form' :model='updateFrom' label-width='80px' size='mini'>
-    <el-form-item label='手机号'>
+  <el-form
+    ref='updateFromRules'
+    :model='updateFrom'
+    label-width='80px'
+    size='mini'
+    :rules='updateFromRules'
+  >
+    <el-form-item label='名称' prop='name'>
+      <el-input v-model='updateFrom.name' size='medium'></el-input>
+    </el-form-item>
+    <el-form-item label='手机号' prop='phone'>
       <el-input v-model='updateFrom.phone' size='medium'></el-input>
     </el-form-item>
     <el-form-item label='性别'>
@@ -17,16 +26,78 @@
 
 <script>
 export default {
+  created() {
+    this.getSelf()
+  },
   data() {
     return {
+      updateFromRules: {
+        name: [
+          { min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur' }
+        ],
+        phone: [
+          {
+            validator: this.checkPhone,
+            trigger: 'blur'
+          }
+        ]
+      },
       updateFrom: {
-        phone: '13128863333',
-        gender: '男'
+        name: '',
+        phone: '',
+        gender: ''
       }
     }
   },
   methods: {
-    onSubmit() {}
+    checkPhone(rule, value, callback) {
+      if (!value) {
+        return callback(new Error('手机号不能为空'))
+      } else {
+        const reg = /^1[3|4|5|7|8][0-9]\d{8}$/
+        if (reg.test(value)) {
+          callback()
+        } else {
+          return callback(new Error('请输入正确的手机号'))
+        }
+      }
+    },
+    getSelf() {
+      this.$http
+        .get('student/user')
+        .then(res => {
+          this.updateFrom.name = res.data.data.name
+          this.updateFrom.phone = res.data.data.phone
+          this.updateFrom.gender = res.data.data.gender
+        })
+        .catch(() => {
+          return this.$message.error('更新个人资料失败！')
+        })
+    },
+    onSubmit() {
+      const that = this
+      this.$refs.updateFromRules.validate(async validate => {
+        if (!validate) {
+          return this.$message.error('请把信息填写完整！')
+        }
+
+        // 发起axios请求
+        await that.$http
+          .patch('student/user', {
+            name: that.updateFrom.name,
+            phone: that.updateFrom.phone,
+            gender: that.updateFrom.gender
+          })
+          .then(res => {
+            that.$message.success('修改数据成功')
+            // TODO: 刷新当前的页面
+            this.getSelf()
+          })
+          .catch(() => {
+            return that.$message.error('修改个人资料错误')
+          })
+      })
+    }
   }
 }
 </script>

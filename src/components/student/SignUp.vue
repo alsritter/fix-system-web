@@ -10,7 +10,7 @@
     </div>
 
     <div class='signUp_box'>
-      <el-form :model='signUpForm' class='login_form' ref='signUpFormRef' :rules='signUpFormRules'>
+      <el-form :model='signUpForm' class='signUp_form' ref='signUpFormRef' :rules='signUpFormRules'>
         <!-- 用户 id -->
         <el-form-item label-width='0px' prop='userID'>
           <el-input
@@ -105,8 +105,7 @@ export default {
           {
             required: true,
             message: '不要空着噢',
-            trigger: 'blur',
-            type: 'number'
+            trigger: 'blur'
           },
           { validator: this.isExist, trigger: 'blur' }
         ],
@@ -223,7 +222,7 @@ export default {
 
         // 发起axios请求
         await that.$http
-          .post('student/sign-up', {
+          .post('/student/sign-up', {
             studentId: that.signUpForm.userID, // 表单参数 3个
             password: that.signUpForm.password,
             codevalue: that.signUpForm.Ucode,
@@ -306,7 +305,7 @@ export default {
   height: 70%;
   position: absolute;
   bottom: 0%;
-  .login_form {
+  .signUp_form {
     bottom: 0;
     width: 80%;
     height: 100%;
@@ -330,6 +329,10 @@ export default {
     }
   }
 
+  .btns /deep/ .el-form-item__content {
+    height: 100%;
+  }
+
   .btns {
     margin-bottom: 5px;
     height: 10%;
@@ -338,7 +341,6 @@ export default {
     .el-button {
       position: absolute;
       transform: translate(-50%, 0);
-      left: 50%;
       width: 300px;
       height: 50px;
       background-color: white;
