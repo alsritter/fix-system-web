@@ -314,6 +314,7 @@ export default {
               })
               .then(response => {
                 if (response.data.code === 204) {
+                  location.reload()
                   return that.$message.error('删除订单失败')
                 }
                 that.$message.success('删除订单成功')

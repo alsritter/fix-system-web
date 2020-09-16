@@ -21,10 +21,9 @@
         <el-button @click='getWorkerDetails() ; dialogVisible = true'>查看详情</el-button>
         <el-dialog title='提示' :visible.sync='dialogVisible' width='30%'>
           <span>
-            <el-progress :percentage='num'></el-progress>
-            <el-progress :percentage='num'></el-progress>
-            <el-progress :percentage='num'></el-progress>
             {{WorkerDetails.name}}
+            已完成单数： {{WorkerDetails.ordersNumber}}
+            今日完成单数： {{WorkerDetails.ordersNumberToday}}
             <el-rate
               v-model='AVGrate'
               disabled
@@ -32,11 +31,24 @@
               text-color='#ff9900'
               score-template='{value}'
             ></el-rate>
-            已完成单数： {{WorkerDetails.ordersNumber}}
-            日期{{thisMonth.date}}
-            评分{{thisMonth.grade}}
-            完成单数{{type.number}}
-            最擅长类型{{type.typeName}}
+            <!-- 本月评分数组 -->
+
+            <el-table :data='thisMonth' style='width: 100%'>
+              <el-table-column prop='date' label='日期' width='180'></el-table-column>
+              <el-table-column prop='grade' label='评分' width='180'>
+                <template slot-scope='scope'>
+                  <el-rate
+                    v-model='scope.row.grade'
+                    disabled
+                    show-score
+                    text-color='#ff9900'
+                    score-template='{value}'
+                  ></el-rate>
+                </template>
+              </el-table-column>
+            </el-table>
+
+            <!-- 本月 -->
           </span>
           <span slot='footer' class='dialog-footer'>
             <el-button @click='dialogVisible = false'>取 消</el-button>
@@ -117,7 +129,7 @@ export default {
     // 获取当前工人ID
     getWorkerId(row) {
       this.workerId = row.workId
-      console.log('工号' + this.workerId)
+      // console.log('工号' + this.workerId)
     },
     // 拉取工人详情
     getWorkerDetails() {
@@ -131,27 +143,22 @@ export default {
           })
           .then(response => {
             that.$message.success('拉取详情成功')
-            var date = new Date(response.data.data.joinDate)
-            var year = date.getFullYear() + '-'
-            var month =
-              (date.getMonth() + 1 < 10
-                ? '0' + (date.getMonth() + 1)
-                : date.getMonth() + 1) + '-'
-            var dates = date.getDate() + ' '
-            var hour = date.getHours() + ':'
-            var min = date.getMinutes() + ':'
-            var second = date.getSeconds()
             that.WorkerDetails = response.data.data
-            console.log(that.WorkerDetails)
-            // that.type = response.data.data.type
-            // that.thisMonth = response.data.data.thisMonth
-            console.log(that.thisMonth.date)
-            console.log(that.thisMonth)
-            that.WorkerDetails.joinDate =
-              year + month + dates + hour + min + second
+            that.thisMonth = that.WorkerDetails.thisMonth
+            that.type = that.WorkerDetails.type
+            const thisMonthArrayLength = response.data.data.thisMonth.length
+            //  挨个处理评分
+            for (var j = 0; j < thisMonthArrayLength; j++) {
+              that.thisMonth[j].date = new Date(
+                parseInt(response.data.data.thisMonth[j].date)
+              )
+                .toLocaleString()
+                .replace(/:\d{1,2}$/, ' ')
+               that.thisMonth[j].grade = response.data.data.thisMonth[j].grade / 2
+            }
             that.AVGrate = that.WorkerDetails.avgGrade / 2
           })
-          .catch((error) => {
+          .catch(error => {
             return that.$message.error(error.$message)
           })
       }
@@ -166,7 +173,3 @@ export default {
   margin-top: 0;
 }
 </style>
-TODO: 按需排序，点击跳转工人详情页
-TODO: thisMonth: {},
-      type: {} 无法接收返回的对象，表格灌输据能显示但会内部报错，而且EL表达式显示不了
-      TODO:根据本月数组的长度，遍历生成进度条，且每个的数值要对应
