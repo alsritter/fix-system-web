@@ -5,7 +5,7 @@
       <li :class='[menuIcon,"fold_menu_icon"]' @click='menuButton()'></li>
     </el-header>
     <el-aside :class='{isNone:isfoldAside}'>
-      <el-menu class='el-menu-vertical-demo' @select='select' :collapse='isfold' router>
+      <el-menu class='el-menu-vertical-demo' @select='select' :collapse='isfold' router default-active="updateUser">
         <el-menu-item index='updateUser'>
           <i class='el-icon-user-solid'></i>
           <span slot='title'>修改个人资料</span>

@@ -32,6 +32,7 @@ axios.interceptors.request.use((config) => {
 // vue相关配置
 Vue.use(ElementUI)
 Vue.config.productionTip = false
+
 // Vue.component('VoPages', VoPages)
 // axios相关配置
 axios.defaults.baseURL = 'http://47.103.192.147:8080/'
@@ -39,6 +40,6 @@ axios.defaults.baseURL = 'http://47.103.192.147:8080/'
 Vue.prototype.$value = new Vue()
 Vue.prototype.$http = axios
 new Vue({
-  router,
-  render: h => h(App)
+    router,
+    render: h => h(App)
 }).$mount('#app')

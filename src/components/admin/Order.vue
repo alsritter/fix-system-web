@@ -8,10 +8,10 @@
         @row-click='getorderId'
         @cell-mouse-enter='getorderId'
         :row-class-name='tableRowClassName'
-         v-loading="loading"
-    element-loading-text="拼命加载中"
-    element-loading-spinner="el-icon-loading"
-    element-loading-background="rgba(0, 0, 0, 0.8)"
+        v-loading='loading'
+        element-loading-text='拼命加载中'
+        element-loading-spinner='el-icon-loading'
+        element-loading-background='rgba(0, 0, 0, 0.8)'
       >
         <!-- 大表格内容 -->
         <el-table-column prop='fixTableId' label='单号' width='180' sortable></el-table-column>
@@ -167,7 +167,7 @@
                   <br />
                   处理结果{{orderDertails.resultDetails}}
                   <br />
-                  消息{{orderDertails.massage}}
+                  消息{{orderDertails.message}}
                   <br />
                   <!-- 评分 -->
                   <el-rate
@@ -339,19 +339,23 @@ export default {
     getOrder() {
       const that = this
       async function getOrder() {
-        await that.$http.get('admin/order-list').then(response => {
-          if (response.data.code !== 200) {
-            return that.$message.error('拉取失败')
-          }
-          that.loading = false
-          that.$message.success('拉取订单成功')
-          var byState = response.data.data.slice(0)
-          byState.sort(function (a, b) {
-            return a.state - b.state
+        await that.$http
+          .get('admin/order-list')
+          .then(response => {
+            that.orders = response.data.data
+            that.total = response.data.data.length
+            that.loading = false
+            that.$message.success('拉取订单成功')
+            var byState = response.data.data.slice(0)
+            byState.sort(function (a, b) {
+              return a.state - b.state
+            })
+            that.orders = byState
+            that.total = byState.length
           })
-          that.orders = byState
-          that.total = byState.length
-        })
+          .catch(() => {
+            return that.$message.error('拉取失败')
+          })
       }
       getOrder()
     },
@@ -405,13 +409,15 @@ export default {
     getWorker() {
       const that = this
       async function seeWorker() {
-        await that.$http.get('admin/select-worker').then(response => {
-          if (response.data.code !== 200) {
+        await that.$http
+          .get('admin/select-worker')
+          .then(response => {
+            that.$message.success('拉取工人成功')
+            that.workerData = response.data.data
+          })
+          .catch(() => {
             return that.$message.error('拉取工人失败')
-          }
-          that.$message.success('拉取工人成功')
-          that.workerData = response.data.data
-        })
+          })
       }
       seeWorker()
     },
@@ -438,13 +444,15 @@ export default {
     handleCurrentChange() {
       const that = this
       async function getOrder() {
-        await that.$http.get('admin/order-list').then(response => {
-          if (response.data.code !== 200) {
+        await that.$http
+          .get('admin/order-list')
+          .then(response => {
+            that.$message.success('拉取订单成功')
+            that.orders = response.data.data
+          })
+          .catch(() => {
             return that.$message.error('拉取失败')
-          }
-          that.$message.success('拉取订单成功')
-          that.orders = response.data.data
-        })
+          })
       }
       getOrder()
     }
