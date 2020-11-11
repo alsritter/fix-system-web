@@ -6,10 +6,12 @@ import axios from 'axios'
 import qs from 'qs'
 import 'element-ui/lib/theme-chalk/index.css'
 import './assets/css/global.css'
-import './assets/css/student.css'
 import ElementUI from 'element-ui'
 // 引入阿里图标库
 import './assets/css/iconfont.css'
+import echarts from 'echarts'
+Vue.prototype.$echarts = echarts
+
 // 引入翻页插件
 // mian.js
 // import VoPages from 'vo-pages'
@@ -35,7 +37,9 @@ Vue.config.productionTip = false
 
 // Vue.component('VoPages', VoPages)
 // axios相关配置
-axios.defaults.baseURL = 'http://47.103.192.147:8080/'
+axios.defaults.baseURL = 'http://47.103.192.147:7758/'
+// 'http://localhost:7758/'
+// 'http://47.103.192.147:7758/'
 
 Vue.prototype.$value = new Vue()
 Vue.prototype.$http = axios

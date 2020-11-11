@@ -3,8 +3,6 @@ import VueRouter from 'vue-router'
 import axios from 'axios'
 // 单独引入消息组件
 import { Message } from 'element-ui'
-// 根页面，用来选择是哪种用户
-import Root from '../components/Root.vue'
 // 管理员页面
 import AdminLogin from '@/components/admin/Login'
 import AdHome from '@/components/admin/AdHome'
@@ -15,24 +13,15 @@ import SelfCenter from '@/components/admin/SelfCenter'
 import Statistics from '@/components/admin/Statistics'
 import Student from '@/components/admin/Student'
 import Tools from '@/components/admin/Tools'
-import Announcement from '../components/admin/Announcement.vue'
-import WorkerRegister from '../components/admin/WorkerRegister.vue'
-import ImployeeDetails from '../components/admin/ImployeeDetail.vue'
-// 学生页面
-import StudentLogin from '@/components/student/StudentLogin'
-import StudentSignUp from '../components/student/SignUp.vue'
-import StudentHome from '@/components/student/StudentHome'
-import UpdateUser from '../components/student/UpdateUser.vue'
-import CallUp from '../components/student/CallUp.vue'
-import MyOrder from '../components/student/MyOrder.vue'
-import OrderList from '../components/student/OrderList.vue'
+import addWorker from '@/components/admin/addWorker.vue'
+import addEquipment from '@/components/admin/addEquipment.vue'
+import equipmentList from '@/components/admin/equipmentList.vue'
+import resourceStatistics from '@/components/admin/resourceStatistics.vue'
 
 Vue.use(VueRouter)
 const routes = [
-  { path: '/', component: Root },
-  { path: '/student/Login', component: StudentLogin },
-  { path: '/student/signUp', component: StudentSignUp },
-  { path: '/admin/Login', component: AdminLogin },
+  { path: '/', redirect: '/admin/SelfCenter' },
+  { path: '/admin/login', component: AdminLogin },
   {
     // 管理员路由注册
     path: '/admin',
@@ -45,28 +34,17 @@ const routes = [
       { path: 'Order', component: Order },
       {
         path: 'WorkerManage',
-        component: WorkerManage,
-        children: [
-        { path: 'ImployeeDetails', component: ImployeeDetails }
-      ]
+        component: WorkerManage
       },
       { path: 'SelfCenter', component: SelfCenter },
       { path: 'Statistics', component: Statistics },
       { path: 'Student', component: Student },
       { path: 'Tools', component: Tools },
-      { path: 'Announcement', component: Announcement },
-      { path: 'WorkerRegister', component: WorkerRegister }
-    ]
-  },
-  {
-    path: '/student',
-    component: StudentHome,
-    redirect: '/student/updateUser',
-    children: [
-      { path: 'updateUser', component: UpdateUser },
-      { path: 'callUp', component: CallUp },
-      { path: 'myOrder', component: MyOrder },
-      { path: 'orederList', component: OrderList }
+      { path: 'Statistics', component: Statistics },
+      { path: 'addWorker', component: addWorker },
+      { path: 'addEquipment', component: addEquipment },
+      { path: 'equipmentList', component: equipmentList },
+      { path: 'resourceStatistics', component: resourceStatistics }
     ]
   }
 ]
@@ -90,15 +68,10 @@ router.beforeEach((to, from, next) => {
   if (to.path === '/') return next()
   // 几个特殊的路由运行通过就好了
   if (to.path === '/admin/login') return next()
-  if (to.path === '/student/login') return next()
-  if (to.path === '/student/signUp') return next()
   if (to.path === '/utils/**') return next()
-
-  // 先截取路径前缀（动态获取根路径）
-  const pathStr = to.path.substring(1, to.path.substr(1).indexOf('/') + 1)
   // 获取token
-  const tokenStr = window.localStorage.getItem(`${pathStr}-token`)
-  if (!tokenStr) return next(`/${pathStr}/login`)
+  const tokenStr = window.localStorage.getItem('admin-token')
+  if (!tokenStr) return next('/admin/login')
   next()
 })
 
@@ -106,7 +79,7 @@ router.beforeEach((to, from, next) => {
 axios.interceptors.request.use(config => {
   const pathStr = config.url.substring(0, config.url.substr(1).indexOf('/') + 1)
   if (pathStr === 'util') { return config }
-  config.headers.Authorization = window.localStorage.getItem(`${pathStr}-token`)
+  config.headers.Authorization = window.localStorage.getItem('admin-token')
   return config
 })
 
@@ -118,8 +91,7 @@ axios.interceptors.response.use(response => {
   if (error.response.data.code === 401) {
     // Vue.$message.error
     Message.error('登录过期了，请重新登陆')
-    const pathStr = error.response.config.url.substring(0, error.response.config.url.substr(1).indexOf('/') + 1)
-    router.push(`/${pathStr}/login`)
+    router.push('/admin/login')
   } else {
     return Promise.reject(error)
   }

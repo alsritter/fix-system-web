@@ -1,242 +1,366 @@
 <template>
-  <div>
-    <div class='OrderBox'>
+  <div class="user-box">
+    <el-form :model="searchform" class="searchform">
+      <el-row :gutter="20">
+        <el-col :span="4">
+          <el-form-item label="工号搜索">
+            <el-input
+              v-model="searchform.studentId"
+              placeholder="请输入工号"
+              show-word-limit
+              maxlength="17"
+            >
+            </el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="4">
+          <el-form-item label="学号搜索">
+            <el-input
+              v-model="searchform.workerId"
+              placeholder="请输入学号"
+              show-word-limit
+              maxlength="17"
+            >
+            </el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="4">
+          <el-form-item label="报修类型">
+            <el-input
+              v-model="searchform.faultClass"
+              placeholder="请输入类型"
+              show-word-limit
+              maxlength="17"
+            >
+            </el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="4">
+          <el-form-item label="手机号搜索" prop="phone">
+            <el-input
+              v-model="searchform.phone"
+              placeholder="请输入手机号"
+              show-word-limit
+            >
+            </el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="4">
+          <el-form-item label="联系人搜索">
+            <el-input
+              v-model="searchform.name"
+              placeholder="名字"
+              show-word-limit
+              maxlength="17"
+            >
+            </el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="4" class="head_button">
+          <div>
+            <el-button type="primary" @click="search()" round>搜索</el-button>
+            <el-button @click="cancel()" round>取消</el-button>
+          </div>
+        </el-col>
+      </el-row>
+    </el-form>
+    <div>
       <el-table
-        :data='orders.slice((currentPage-1)*pagesize,currentPage*pagesize)'
-        style='width: 100%'
-        :default-sort='{prop: "state", order: "ascending"}'
-        @row-click='getorderId'
-        @cell-mouse-enter='getorderId'
-        :row-class-name='tableRowClassName'
-        v-loading='loading'
-        element-loading-text='拼命加载中'
-        element-loading-spinner='el-icon-loading'
-        element-loading-background='rgba(0, 0, 0, 0.8)'
+        class="order-list"
+        :data="
+          orders.slice((currentPage - 1) * pagesize, currentPage * pagesize)
+        "
+        size="small"
+        style="width: 100%"
+        :default-sort="{ prop: 'state', order: 'ascending' }"
+        :row-class-name="tableRowClassName"
+        v-loading="loading"
+        element-loading-text="拼命加载中"
+        element-loading-spinner="el-icon-loading"
+        element-loading-background="rgba(0, 0, 0, 0.8)"
       >
         <!-- 大表格内容 -->
-        <el-table-column prop='fixTableId' label='单号' width='180' sortable></el-table-column>
-        <el-table-column prop='studentId' label='学生号' width='180'></el-table-column>
-        <el-table-column prop='address' label='地址'></el-table-column>
-        <el-table-column prop='createdTime' label='创建时间' sortable :formatter='dateFormat'></el-table-column>
-        <el-table-column prop='faultClass' label='报修类型'></el-table-column>
-        <el-table-column prop='contacts' label='联系人'></el-table-column>
-        <el-table-column prop='phone' label='电话'></el-table-column>
-        <el-table-column prop='state' label='状态' sortable :formatter='statusFormat'></el-table-column>
-        <el-table-column label='操作'>
-          <!-- 按钮 -->
-          <template slot-scope='scope'>
+        <el-table-column
+          prop="fixTableId"
+          label="单号"
+          sortable
+        ></el-table-column>
+        <el-table-column
+          prop="studentId"
+          label="学生号"
+          sortable
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+        <el-table-column
+          prop="address"
+          label="地址"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+        <el-table-column
+          prop="createdTime"
+          label="创建时间"
+          sortable
+          :formatter="dateFormat"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+        <el-table-column
+          prop="faultClass"
+          label="报修类型"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+        <el-table-column prop="contacts" label="联系人"></el-table-column>
+        <el-table-column
+          prop="phone"
+          label="电话"
+          sortable
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+        <el-table-column
+          prop="state"
+          label="状态"
+          sortable
+          :formatter="statusFormat"
+        ></el-table-column>
+        <el-table-column label="操作" width="200px">
+          <!-- 按钮组 -->
+          <template slot-scope="scope">
             <el-button
-              type='text'
-              @click='questDetails0 = true ; getDetails0(scope.row)'
-              v-if='scope.row.state === 0'
-            >点击查看保修详情</el-button>
+              type="success"
+              circle
+              v-if="scope.row.state === 0"
+              @click="getWorker(scope.row)"
+            >
+              选
+            </el-button>
+            <el-button type="info" circle @click="getOrderDetails(scope.row)"
+              >详</el-button
+            >
             <el-button
-              type='primary'
-              @click='selectWorker = true ; getWorker() ; getorderId(scope.row)'
-              v-if='scope.row.state === 0'
-            >选择工人</el-button>
-            <el-button
-              type='text'
-              @click='questDetails1 = true ; getDetails1(scope.row)'
-              v-if='scope.row.state === 1'
-            >点击查看保修详情</el-button>
-            <el-button
-              type='text'
-              @click='questDetails2 = true ; getDetails2(scope.row)'
-              v-if='scope.row.state === 2'
-            >点击查看保修详情</el-button>
-            <el-button
-              type='primary'
-              @click='getOrderDetails(scope.row.fixTableId) ; seeDetails = true ; getorderId(scope.row) ; sentValue(scope.row) '
-              v-if='scope.row.state === 2'
-            >查看详情</el-button>
-            <el-button
-              @click.native.prevent='
-                            removeOrder(scope.$index, orders)'
-              v-if='scope.row.state != 2'
-              type='text'
-              size='small'
-            >移除</el-button>
-            <!-- 弹窗内容 -->
-            <div>
-              <!-- 待处理 -->
-              <el-dialog
-                title='问题描述'
-                :visible.sync='questDetails0'
-                width='70%'
-                :append-to-body='true'
-              >
-                <span>{{Details0}}</span>
-                <span slot='footer' class='dialog-footer'>
-                  <el-button @click='questDetails0 = false'>取 消</el-button>
-                  <el-button type='primary' @click='questDetails0 = false'>确 定</el-button>
-                </span>
-              </el-dialog>
-              <!-- 选择工人 -->
-              <el-dialog
-                title='问题描述'
-                :visible.sync='selectWorker'
-                width='70%'
-                :append-to-body='true'
-              >
-                <span>
-                  <el-table
-                    ref='singleTable'
-                    :data='workerData'
-                    style='width: 100%'
-                    @row-click='getworkerId'
-                    max-height='250'
-                    @cell-mouse-enter='getworkerId'
-                  >
-                    <el-table-column property='gender' label='性别' width='50'></el-table-column>
-                    <el-table-column property='id' label='工号' width='120'></el-table-column>
-                    <el-table-column property='name' label='姓名' width='120'></el-table-column>
-                    <el-table-column property='phone' label='电话'></el-table-column>
-                    <el-table-column fixed='right' label='操作' width='120'>
-                      <template>
-                        <el-button @click='commitWorker()' type='text' size='small'>选择</el-button>
-                      </template>
-                    </el-table-column>
-                  </el-table>
-                </span>
-                <span slot='footer' class='dialog-footer'>
-                  <el-button @click='selectWorker = false'>取 消</el-button>
-                  <!-- <el-button type='primary' @click='selectWorker = false'>确 定</el-button> -->
-                </span>
-              </el-dialog>
-              <!-- 进行中 -->
-              <el-dialog
-                title='问题描述'
-                :visible.sync='questDetails1'
-                width='70%'
-                :append-to-body='true'
-              >
-                <span>{{Details1}}</span>
-                <span slot='footer' class='dialog-footer'>
-                  <el-button @click='questDetails1 = false'>取 消</el-button>
-                  <el-button type='primary' @click='questDetails1 = false'>确 定</el-button>
-                </span>
-              </el-dialog>
-              <el-dialog
-                title='问题描述'
-                :visible.sync='changeWorker'
-                width='70%'
-                :append-to-body='true'
-              >
-                <span></span>
-                <span slot='footer' class='dialog-footer'>
-                  <el-button @click='changeWorker = false'>取 消</el-button>
-                  <el-button type='primary' @click='changeWorker = false'>确 定</el-button>
-                </span>
-              </el-dialog>
-              <!-- 已完成 -->
-              <el-dialog
-                title='问题描述'
-                :visible.sync='questDetails2'
-                width='70%'
-                :append-to-body='true'
-              >
-                <span>{{Details2}}</span>
-                <span slot='footer' class='dialog-footer'>
-                  <el-button @click='questDetails2 = false'>取 消</el-button>
-                  <el-button type='primary' @click='questDetails2 = false'>确 定</el-button>
-                </span>
-              </el-dialog>
-              <!-- 查看详情 -->
-              <el-dialog title='问题描述' :visible.sync='seeDetails' width='70%' :append-to-body='true'>
-                <span>
-                  单号{{orderDertails.fixTableId}}
-                  <br />
-                  学生号{{orderDertails.studentId}}
-                  <br />
-                  联系人{{orderDertails.contacts}}
-                  <br />
-                  地址{{orderDertails.address}}
-                  <br />
-                  创建时间{{orderDertails.createdTime}}
-                  <br />
-                  完成时间{{orderDertails.endTime}}
-                  <br />
-                  电话{{orderDertails.phone}}
-                  <br />
-                  报修类型{{orderDertails.faultClass}}
-                  <br />
-                  报修描述{{orderDertails.faultDetail}}
-                  <br />
-                  工人工号{{orderDertails.workId}}
-                  <br />
-                  处理结果{{orderDertails.resultDetails}}
-                  <br />
-                  消息{{orderDertails.message}}
-                  <br />
-                  <!-- 评分 -->
-                  <el-rate
-                    v-model='value'
-                    disabled
-                    show-score
-                    text-color='#ff9900'
-                    score-template='{value}'
-                  ></el-rate>
-                </span>
-                <span slot='footer' class='dialog-footer'>
-                  <el-button @click='seeDetails = false'>取 消</el-button>
-                  <el-button type='primary' @click='seeDetails = false'>确 定</el-button>
-                </span>
-              </el-dialog>
-            </div>
+              v-if="scope.row.state != 2"
+              type="danger"
+              circle
+              @click="removeOrder(scope.$index, orders)"
+              >删</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
-      <el-button type='primary' icon='el-icon-search' @click='getOrder' class='btn'>刷新订单</el-button>
+      <!-- 选择工人 -->
+      <el-dialog
+        title="选择工人（只显示尚未被分配工作的工人）"
+        :visible.sync="selectWorkerVisible"
+        width="70%"
+        :append-to-body="true"
+      >
+        <el-table
+          ref="singleTable"
+          :data="workerData"
+          style="width: 100%"
+          max-height="70%"
+        >
+          <el-table-column
+            property="id"
+            label="工号"
+            :show-overflow-tooltip="true"
+          ></el-table-column>
+          <el-table-column property="name" label="姓名"></el-table-column>
+          <el-table-column
+            property="phone"
+            label="电话"
+            :show-overflow-tooltip="true"
+          ></el-table-column>
+          <el-table-column
+            prop="state"
+            label="状态"
+            :formatter="statusWorkerFormat"
+          ></el-table-column>
+          <el-table-column label="操作">
+            <template slot-scope="scope">
+              <el-button
+                @click="commitWorker(scope.row)"
+                type="primary"
+                size="small"
+                circle
+                >选</el-button
+              >
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-dialog>
+      <!-- 查看详情 -->
+      <order-details
+        :show.sync="orderDetailsVisible"
+        :orderInfo.sync="pageData"
+      ></order-details>
+      <!-- 导出按钮 -->
+      <div class="toexcel">
+        <el-button @click="exportExcel" type="primary">导出 Excel</el-button>
+      </div>
       <!-- 大表格分页 -->
-      <div class='block'>
-        <el-pagination @current-change='current_change' layout='prev, pager, next' :total='total'></el-pagination>
+      <div class="pagination-block">
+        <el-pagination
+          :page-size="pagesize"
+          @current-change="current_change"
+          layout="prev, pager, next, total"
+          :total="total"
+        ></el-pagination>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import XLSX from 'xlsx'
 import moment from 'moment'
+import OrderDetails from './OrderDetails'
 export default {
+  components: {
+    OrderDetails
+  },
   created() {
     this.getOrder()
+    // 检测当前屏幕的缩放比
+    const size = this.detectZoom()
+    // console.log(size)
+    if (size <= 100) {
+      this.pagesize = 9
+    } else if (size < 111) {
+      this.pagesize = 7
+    } else if (size < 126) {
+      this.pagesize = 5
+    } else {
+      this.pagesize = 4
+    }
   },
   data() {
     return {
-      // 评分
-      value: null,
-      // 问题描述
-      Details0: '',
-      Details1: '',
-      Details2: '',
       // 分页数据
       total: 0,
-      pagesize: 10,
+      pagesize: 0,
       currentPage: 1,
       // 订单列表
       orders: [],
-      // 某个订单的id
-      fixTableId: '0',
-      activeName: '1',
       // 工人列表
       workerData: [],
-      // 某个工人的ID
-      workerId: '0',
-      // 左侧按钮
-      questDetails0: false,
-      questDetails1: false,
-      questDetails2: false,
-      // 右侧按钮
-      selectWorker: false,
-      changeWorker: false,
-      seeDetails: false,
+      // 选择工人
+      selectWorkerForm: {
+        fixTableId: ''
+      },
+      // 窗口显示标识
+      selectWorkerVisible: false,
+      orderDetailsVisible: false,
+      loading: true,
+      searchform: {
+        studentId: '',
+        workerId: '',
+        faultClass: '',
+        phone: '',
+        name: ''
+      },
       // 订单详情
-      orderDertails: {},
-      loading: true
+      pageData: {
+        contacts: '',
+        address: '',
+        createdTime: '',
+        phone: '',
+        faultClass: '',
+        faultDetail: '',
+        workId: '',
+        state: '',
+        endTime: '',
+        message: '',
+        resultDetails: '',
+        orderId: '',
+        urls: []
+      }
     }
   },
   methods: {
+    // 导出表格所用
+    exportExcel() {
+      const tempArr = this.orders
+      for (const item of tempArr) {
+        item.createdTime = new Date(parseInt(item.createdTime))
+          .toLocaleString()
+          .replace(/:\d{1,2}$/, ' ')
+        if (item.endTime != null) {
+          item.endTime = new Date(parseInt(item.endTime))
+            .toLocaleString()
+            .replace(/:\d{1,2}$/, ' ')
+        }
+      }
+
+      const ordersheet = XLSX.utils.json_to_sheet(tempArr)
+      const newOrderbook = XLSX.utils.book_new()
+      XLSX.utils.book_append_sheet(newOrderbook, ordersheet, '订单列表')
+      XLSX.writeFile(newOrderbook, '订单列表' + '.xlsx')
+    },
+    cancel() {
+      this.searchform = {
+        studentId: '',
+        workerId: '',
+        faultClass: '',
+        phone: '',
+        name: ''
+      }
+      // 点击取消就刷新页面就可以了
+      this.getOrder()
+    },
+    search() {
+      if (
+        this.searchform.studentId === '' &&
+        this.searchform.workerId === '' &&
+        this.searchform.faultClass === '' &&
+        this.searchform.phone === '' &&
+        this.searchform.name === ''
+      ) {
+        return this.$message.error('搜索不能全为空')
+      }
+      this.$http
+        .get('admin/search-order', {
+          params: {
+            workerId: this.searchform.studentId,
+            studentId: this.searchform.workerId,
+            name: this.searchform.name,
+            phone: this.searchform.phone,
+            faultClass: this.searchform.faultClass
+          }
+        })
+        .then(response => {
+          this.orders = response.data.data
+          this.total = response.data.data.length
+
+          const byState = response.data.data.slice(0)
+          byState.sort(function (a, b) {
+            return a.state - b.state
+          })
+          this.orders = byState
+        })
+        .catch(error => {
+          return this.$message.error(error.$message)
+        })
+    },
+    detectZoom() {
+      let ratio = 0
+      const screen = window.screen
+      const ua = navigator.userAgent.toLowerCase()
+      if (window.devicePixelRatio !== undefined) {
+        ratio = window.devicePixelRatio
+      } else if (~ua.indexOf('msie')) {
+        if (screen.deviceXDPI && screen.logicalXDPI) {
+          ratio = screen.deviceXDPI / screen.logicalXDPI
+        }
+      } else if (
+        window.outerWidth !== undefined &&
+        window.innerWidth !== undefined
+      ) {
+        ratio = window.outerWidth / window.innerWidth
+      }
+      if (ratio) {
+        ratio = Math.round(ratio * 100)
+      }
+      return ratio
+    },
     // 显示订单状态颜色的函数
     tableRowClassName({ row }) {
       if (row.state === 0) {
@@ -254,7 +378,7 @@ export default {
       if (date === undefined) {
         return ''
       }
-      return moment(date).format('YYYY-MM-DD HH:mm:ss')
+      return moment(date).format('YYYY-MM-DD HH:mm')
     },
     // 格式化状态
     statusFormat: function (row, column) {
@@ -267,206 +391,202 @@ export default {
         return '已完成'
       }
     },
-    // 保存评分到model层
-    sentValue(row) {
-      this.value = row.grade / 2
-    },
     // 获取问题描述的3个方法
-    getDetails0(row) {
-      this.Details0 = row.faultDetail
-    },
-    getDetails1(row) {
-      this.Details1 = row.faultDetail
-    },
-    getDetails2(row) {
-      this.Details2 = row.faultDetail
+    getDetails(row) {
+      this.Details = row.faultDetail
     },
     // 翻页函数
     current_change: function (currentPage) {
       this.currentPage = currentPage
     },
-    // 获取订单 ID 函数
-    getorderId(row) {
-      this.fixTableId = row.fixTableId
-      // console.log('单号' + this.fixTableId)
-    },
-    // 获取工人ID函数
-    getworkerId(row) {
-      this.workerId = row.id
-      // console.log('工号' + this.workerId)
-    },
     // 取消订单
-    removeOrder(index, rows) {
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+    removeOrder(index, orders) {
+      const that = this
+      this.$confirm('此操作将永久删除该订单, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       })
         .then(() => {
-          rows.splice(index, 1)
-          const that = this
-          async function seeWorker() {
-            await that.$http
-              .delete('admin/order', {
-                params: {
-                  fixTableId: that.fixTableId
-                }
-              })
-              .then(response => {
-                if (response.data.code === 204) {
-                  location.reload()
-                  return that.$message.error('删除订单失败')
-                }
-                that.$message.success('删除订单成功')
-              })
-          }
-          seeWorker()
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          })
+          that.$http
+            .delete('admin/order', {
+              params: {
+                fixTableId: orders[index].fixTableId
+              }
+            })
+            .then(response => {
+              that.$message.success('删除订单成功')
+              setTimeout(() => {
+                location.reload()
+              }, 1000)
+            })
+            .catch(() => {
+              return that.$message.error('删除订单失败')
+            })
         })
-        .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
+        .catch(error => {
+          console.log(error)
         })
     },
-    // 界面内移除订单函数
-    deleteRow(index, rows) {},
     // 拉取订单
     getOrder() {
-      const that = this
-      async function getOrder() {
-        await that.$http
-          .get('admin/order-list')
-          .then(response => {
-            that.orders = response.data.data
-            that.total = response.data.data.length
-            that.loading = false
-            that.$message.success('拉取订单成功')
-            var byState = response.data.data.slice(0)
-            byState.sort(function (a, b) {
-              return a.state - b.state
-            })
-            that.orders = byState
-            that.total = byState.length
+      this.$http
+        .get('admin/order-list')
+        .then(response => {
+          this.orders = response.data.data
+          this.total = response.data.data.length
+          this.loading = false
+
+          var byState = response.data.data.slice(0)
+          byState.sort(function (a, b) {
+            return a.state - b.state
           })
-          .catch(() => {
-            return that.$message.error('拉取失败')
-          })
-      }
-      getOrder()
+          this.orders = byState
+        })
+        .catch(() => {})
+    },
+    getLocalTime(nS) {
+      return new Date(parseInt(nS)).toLocaleString().replace(/:\d{1,2}$/, ' ')
     },
     // 获取订单详情
     getOrderDetails(row) {
-      const that = this
-      async function getOrderDetails() {
-        await that.$http
-          .get('admin/order', {
-            params: {
-              fixTableId: that.fixTableId
+      this.$http
+        .get('admin/order', {
+          params: {
+            fixTableId: row.fixTableId
+          }
+        })
+        .then(response => {
+          this.pageData = response.data.data
+          this.pageData.createdTime = this.getLocalTime(
+            response.data.data.createdTime
+          )
+          if (this.pageData.endTime !== null) {
+            this.pageData.endTime = this.getLocalTime(
+              response.data.data.endTime
+            )
+          }
+
+          if (this.pageData.grade !== null) {
+            this.pageData.grade = this.pageData.grade / 2
+          }
+
+          if (this.pageData.faultDetail == null) {
+            this.pageData.faultDetail = '未描述'
+          }
+
+          if (this.pageData.urls !== null) {
+            if (this.pageData.urls.length > 3) {
+              const urls = []
+              // 需要先切割
+              this.pageData.urls = this.pageData.urls.split(' ')
+              for (const url of this.pageData.urls) {
+                urls.push(this.$http.defaults.baseURL + url)
+              }
+
+              this.pageData.urls = urls
             }
-          })
-          .then(response => {
-            that.$message.success('拉取订单详情成功')
-            // 开始时间
-            var date = new Date(response.data.data.createdTime)
-            var year = date.getFullYear() + '-'
-            var month =
-              (date.getMonth() + 1 < 10
-                ? '0' + (date.getMonth() + 1)
-                : date.getMonth() + 1) + '-'
-            var dates = date.getDate() + ' '
-            var hour = date.getHours() + ':'
-            var min = date.getMinutes() + ':'
-            var second = date.getSeconds()
-            // 结束时间
-            var Edate = new Date(response.data.data.endTime)
-            var Eyear = Edate.getFullYear() + '-'
-            var Emonth =
-              (Edate.getMonth() + 1 < 10
-                ? '0' + (Edate.getMonth() + 1)
-                : Edate.getMonth() + 1) + '-'
-            var Edates = Edate.getDate() + ' '
-            var Ehour = Edate.getHours() + ':'
-            var Emin = Edate.getMinutes() + ':'
-            var Esecond = Edate.getSeconds()
-            that.orderDertails = response.data.data
-            that.orderDertails.createdTime =
-              year + month + dates + hour + min + second
-            that.orderDertails.endTime =
-              Eyear + Emonth + Edates + Ehour + Emin + Esecond
-          })
-          .catch(() => {
-            return that.$message.error('请再点一次哦')
-          })
-      }
-      getOrderDetails()
+          }
+
+          if (!this.pageData.workId) {
+            this.pageData.workId = '尚未处理该订单'
+          }
+          this.orderDetailsVisible = true
+        })
+        .catch(() => {
+          return this.$message.error('拉取订单详情失败')
+        })
     },
     // 获取工人列表
-    getWorker() {
-      const that = this
-      async function seeWorker() {
-        await that.$http
-          .get('admin/select-worker')
-          .then(response => {
-            that.$message.success('拉取工人成功')
-            that.workerData = response.data.data
-          })
-          .catch(() => {
-            return that.$message.error('拉取工人失败')
-          })
+    getWorker(row) {
+      this.$http
+        .get('admin/select-worker')
+        .then(response => {
+          this.selectWorkerForm.fixTableId = row.fixTableId
+          this.workerData = response.data.data
+          this.selectWorkerVisible = true
+        })
+        .catch(() => {
+          return this.$message.error('拉取工人失败')
+        })
+    },
+    // 格式化状态
+    statusWorkerFormat: function (row, column) {
+      var state = row[column.property]
+      if (state === 0) {
+        return '空闲'
+      } else if (state === 1) {
+        return '维修中'
       }
-      seeWorker()
     },
     // 选择工人
-    commitWorker() {
-      const that = this
-      async function seeWorker() {
-        await that.$http
-          .patch('admin/select-worker', {
-            workId: that.workerId,
-            fixTableId: that.fixTableId
-          })
-          .then(response => {
-            that.$message.success('选择工人成功')
+    commitWorker(row) {
+      this.$http
+        .patch('admin/select-worker', {
+          workId: row.id,
+          fixTableId: this.selectWorkerForm.fixTableId
+        })
+        .then(response => {
+          this.$message.success('选择成功')
+          setTimeout(() => {
             location.reload()
-          })
-          .catch(() => {
-            return that.$message.error('没选择到工人噢')
-          })
-      }
-      seeWorker()
-    },
-    // 拉取订单函数
-    handleCurrentChange() {
-      const that = this
-      async function getOrder() {
-        await that.$http
-          .get('admin/order-list')
-          .then(response => {
-            that.$message.success('拉取订单成功')
-            that.orders = response.data.data
-          })
-          .catch(() => {
-            return that.$message.error('拉取失败')
-          })
-      }
-      getOrder()
+            this.selectWorkerVisible = false
+          }, 1000)
+        })
+        .catch(() => {
+          return this.$message.error('没选择到工人噢')
+        })
     }
   }
 }
 </script>
 
-<style scoped>
-#p {
-  margin-top: 0;
+<style lang='less' scoped>
+.user-box {
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  position: relative;
+  border-radius: 20px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
 }
-.btn {
-  display: block;
-  margin: 0 auto;
-  float: left;
+
+.searchform {
+  padding-left: 20px;
+  padding-right: 10px;
+  padding-top: 10px;
+  .head_button {
+    top: 40px;
+    position: relative;
+  }
+}
+
+/* 订单页面的颜色 */
+/deep/ .el-table .warning-row {
+  background: rgb(205, 243, 201);
+}
+/deep/ .el-table .success-row {
+  background: #d3e6f1;
+}
+/deep/ .el-table tbody tr:hover > td {
+  background-color: #0000 !important;
+}
+
+.toexcel {
+  position: fixed;
+  left: 88%;
+  top: 91%;
+  z-index: 10;
+}
+
+.pagination-block {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translate(-50%, -100%);
+}
+
+/deep/ .el-dialog {
+  border-radius: 10px;
 }
 </style>

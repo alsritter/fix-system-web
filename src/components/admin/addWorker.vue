@@ -10,24 +10,18 @@
         class="inputFromBox"
       >
         <el-row>
-          <el-col :span="24">
-            <div class="grid-content bg-purple-dark"></div
-          ></el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="8">
-            <el-form-item label="工号">
+          <el-col :span="8" class="top-item">
+            <el-form-item prop="id" label="工号">
               <div>
                 <el-input
                   v-model="subForm.id"
                   placeholder="请输入内容"
-                  :disabled="true"
                   style="width: 90%"
                 ></el-input>
               </div>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="8" class="top-item">
             <el-form-item prop="name" label="用户名">
               <div>
                 <el-input
@@ -38,8 +32,8 @@
               </div>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
-            <el-form-item prop="department" label="所属部门">
+          <el-col :span="8" class="top-item">
+            <el-form-item label="所属部门">
               <div>
                 <el-select
                   placeholder="请选择"
@@ -97,7 +91,7 @@
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item prop="place" label="籍贯">
+            <el-form-item label="籍贯">
               <div>
                 <el-input
                   placeholder="籍贯"
@@ -119,7 +113,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item prop="ground" label="职位">
+            <el-form-item label="职位">
               <div>
                 <el-select
                   placeholder="请选择"
@@ -138,20 +132,8 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="12">
-            <el-form-item label="加入时间">
-              <el-date-picker
-                type="datetime"
-                v-model="subForm.joinDate"
-                value-format="yyyy-MM-dd"
-                style="width: 90%"
-                :disabled="true"
-              ></el-date-picker>
-            </el-form-item>
-          </el-col>
-
-          <el-col :span="12">
-            <el-form-item prop="address" label="家庭住址">
+          <el-col :span="16">
+            <el-form-item label="家庭住址">
               <div>
                 <el-input
                   placeholder="家庭住址"
@@ -160,10 +142,22 @@
               </div>
             </el-form-item>
           </el-col>
+          <el-col :span="8">
+            <el-form-item label="密码" prop="password">
+              <div>
+                <el-input
+                  placeholder="请输入密码"
+                  v-model="subForm.password"
+                  type="password"
+                  style="width: 100%"
+                ></el-input>
+              </div>
+            </el-form-item>
+          </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
-            <el-form-item label="备注" prop="details">
+            <el-form-item label="备注">
               <div class="input-textarea">
                 <el-input
                   v-model="subForm.details"
@@ -177,6 +171,27 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <el-form-item label="上传头像">
+          <el-upload
+            drag
+            multiple
+            :action="uploadUrl"
+            :limit="1"
+            accept="image/jpeg,image/png"
+            :before-upload="beforeAvatarUpload"
+            :on-remove="handleRemove"
+            :on-success="handleSuccess"
+            :on-error="handleError"
+          >
+            <i class="el-icon-upload"></i>
+            <div class="el-upload__text">
+              将图片拖到此处，或<em>点击上传</em>
+            </div>
+            <div class="el-upload__tip" slot="tip">
+              只能上传jpg/png文件，且不超过 2M
+            </div>
+          </el-upload>
+        </el-form-item>
         <el-form-item>
           <div class="btn">
             <el-button
@@ -206,19 +221,43 @@ export default {
   data() {
     return {
       subForm: {
+        id: '',
         joinDate: new Date(),
         name: '',
         phone: '',
         gender: '男',
         department: '',
+        password: '',
         email: '',
         place: '',
         idnumber: '',
         ground: '',
         address: '',
-        details: ''
+        details: '',
+        url: ''
       },
+      uploadUrl: `${this.$http.defaults.baseURL}admin/upload`,
       rules: {
+        password: [
+          {
+            required: true,
+            message: '密码不能为空',
+            trigger: 'blur'
+          },
+          { min: 3, max: 15, message: '长度在 3 到 15 个字符', trigger: 'blur' }
+        ],
+        id: [
+          {
+            required: true,
+            message: '工号不能为空',
+            trigger: 'blur'
+          },
+          {
+            validator: this.isExist,
+            trigger: 'blur'
+          },
+          { min: 8, max: 17, message: '长度在 8 到 17 个字符', trigger: 'blur' }
+        ],
         phone: [
           {
             required: true,
@@ -250,24 +289,49 @@ export default {
       }
     }
   },
-  created() {
-    this.$http
-      .get('admin/user')
-      .then(response => {
-        this.subForm = response.data.data
-        // toLocaleDateString() 2013年1月1日
-        // toLocaleTimeString() 上午12:00:00
-        // .toLocaleDateString() + '   ' + new Date(time).toLocaleTimeString()
-        const time = this.subForm.joinDate
-        this.subForm.joinDate = new Date(time)
-      })
-      .catch(() => {
-        return this.$message.error('获取个人信息失败')
-      })
-  },
+  created() {},
   methods: {
-    redirect() {
-      this.$router.push('Order')
+    beforeAvatarUpload(file) {
+      const isLt2M = file.size / 1024 / 1024 < 2
+
+      if (!isLt2M) {
+        this.$message.error('上传头像图片大小不能超过 2MB!')
+      }
+
+      return isLt2M
+    },
+    handleError() {
+      console.log('上传失败')
+      return this.$message.error('上传失败')
+    },
+    handleSuccess(response, file, fileList) {
+      this.subForm.url = response.data
+      console.log(this.subForm.url)
+      console.log('上传成功')
+    },
+    handleRemove(file, fileList) {
+      this.subForm.url = null
+    },
+    isExist(rule, value, callback) {
+      this.$http
+        .get('utils/is-exist', {
+          params: {
+            id: value
+          }
+        })
+        .then(response => {
+          // fasle 表示用户不存在
+          if (!response.data.data) {
+            callback()
+          } else {
+            callback(new Error('当前用户已经存在!'))
+          }
+        })
+        .catch(error => {
+          // 出现未知错误也禁止注册
+          console.error(error)
+          callback(new Error('当前用户已经存在!'))
+        })
     },
     getLocalTime(nS) {
       return new Date(parseInt(nS)).toLocaleString().replace(/:\d{1,2}$/, ' ')
@@ -280,40 +344,41 @@ export default {
           return this.$message.error('请检查输入格式')
         }
         this.$http
-          .patch('admin/user', {
+          .post('admin/sign-up-w', {
+            workId: that.subForm.id,
             phone: that.subForm.phone,
             gender: that.subForm.gender,
             name: that.subForm.name,
             details: that.subForm.details,
             address: that.subForm.address,
             department: that.subForm.department,
+            password: that.subForm.password,
             email: that.subForm.email,
             place: that.subForm.place,
             ground: that.subForm.ground,
-            idnumber: that.subForm.idnumber
+            idnumber: that.subForm.idnumber,
+            url: that.subForm.url
           })
           .then(response => {
-            this.$message.success('更新成功')
+            this.$message.success('添加成功！')
+            setTimeout(() => {
+              this.$router.push('WorkerManage')
+            }, 1000)
           })
           .catch(() => {
-            return this.$message.error('没更新到噢')
+            return this.$message.error('添加失败')
           })
       })
     },
-    // 重置表单
-    resetForm() {
-      this.$refs.subForm.resetFields()
+    // 充值表单
+    resetForm(formName) {
+      this.$refs[formName].resetFields()
     }
   }
 }
 </script>
 
 <style lang='less' scoped>
-* {
-  padding: 0;
-  margin: 0px;
-}
-
 /deep/ .el-card {
   border-radius: 20px;
 }
@@ -357,8 +422,16 @@ export default {
   resize: none;
 }
 
+.top-item {
+  margin-top: 15px;
+}
+
+.el-upload {
+  position: relative;
+  left: 50%;
+}
+
 .el-row {
-  margin-bottom: 20px;
   &:last-child {
     margin-bottom: 0;
   }

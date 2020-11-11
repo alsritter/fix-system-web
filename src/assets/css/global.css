@@ -5,16 +5,3 @@ html, body, #app {
     padding: 0;
     min-width: 100%;
 }
-
-/* 订单页面的颜色 */
-  .el-table .warning-row {
-    background: rgb(250, 208, 215);
-  }
-
-  .el-table .success-row {
-    background: #f0f9eb;
-  }
-  .el-table tbody tr:hover>td {
-    background-color:#0000!important
-}
- 

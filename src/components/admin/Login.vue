@@ -1,56 +1,62 @@
 <template>
-  <div class='Login_container'>
-    <div class='login_box'>
-      <div class='avatar_box'>
-        <img src='/src/assets/img/hua.jpg' alt />
-      </div>
+  <div class="Login_container">
+    <div class="login_box">
+      <div class="log_box"></div>
       <!--表单登录区  修改了label-width='80px'-->
-      <div class='login'>
-        <div class='login1'>登录</div>
-        <div class='login2'>
+      <div class="login">
+        <div class="login1">登录</div>
+        <div class="login2">
           <el-form
-            :model='loginForm'
-            label-width='0px'
-            :rules='loginFormRules'
-            ref='loginFormRef'
-            class='login-form'
+            :model="loginForm"
+            label-width="0px"
+            :rules="loginFormRules"
+            ref="loginFormRef"
+            class="login-form"
           >
             <!--输入框-->
             <!-- 这里删掉了el-form-item的label='工号'，写了个label  -->
-            <el-form-item class='txt'>
-              <el-form-item prop='userID' class='data'>
+            <el-form-item class="txt">
+              <el-form-item prop="userID" class="data">
                 <label>用户名</label>
                 <el-input
-                  prefix-icon='el-icon-user'
-                  v-model='loginForm.userID'
-                  @keyup.enter.native='loginValidate'
+                  prefix-icon="el-icon-user"
+                  v-model="loginForm.userID"
+                  @keyup.enter.native="loginValidate"
                 ></el-input>
               </el-form-item>
               <!-- 写了label='密码' -->
-              <el-form-item prop='password' class='data'>
+              <el-form-item prop="password" class="data">
                 <label>密码</label>
                 <el-input
-                  prefix-icon='el-icon-lock'
-                  type='password'
-                  v-model='loginForm.password'
-                  @keyup.enter.native='loginValidate'
+                  prefix-icon="el-icon-lock"
+                  type="password"
+                  v-model="loginForm.password"
+                  @keyup.enter.native="loginValidate"
                 ></el-input>
               </el-form-item>
               <!-- 写了label='验证码' -->
-              <el-form-item prop='Ucode' class='data ucode'>
+              <el-form-item prop="Ucode" class="data ucode">
                 <label>验证码 :</label>
                 <!-- 这个是验证码图像，原本在按钮class='btns'里面的 -->
                 <el-input
-                  prefix-icon='el-icon-lock'
-                  v-model='loginForm.Ucode'
-                  @keyup.enter.native='loginValidate'
+                  prefix-icon="el-icon-lock"
+                  v-model="loginForm.Ucode"
+                  @keyup.enter.native="loginValidate"
                 ></el-input>
-                <el-image :src='imageURL' id='count' @click='getUtils'></el-image>
+                <el-image
+                  :src="imageURL"
+                  id="count"
+                  @click="getUtils"
+                ></el-image>
               </el-form-item>
+              <el-checkbox v-model="remember" style="color: white"
+                >记住密码</el-checkbox
+              >
             </el-form-item>
+
             <!--按钮-->
-            <el-form-item class='btns'>
-              <el-button type='primary' @click='loginValidate'>登录</el-button>
+            <el-form-item class="btns">
+              <el-button type="primary" @click="loginValidate">登录</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -62,19 +68,26 @@
 <script>
 export default {
   created() {
+    const userID = window.localStorage.getItem('userID')
+    const password = window.localStorage.getItem('password')
+    if (userID !== null && password !== null) {
+      this.loginForm.userID = userID
+      this.loginForm.password = password
+    }
     this.getUtils()
   },
   data() {
     return {
+      remember: true,
       loginForm: {
-        userID: '201835070344',
-        password: '12342121',
+        userID: 'admin',
+        password: 'admin',
         Ucode: ''
       },
       loginFormRules: {
-        username: [
+        userID: [
           { required: true, message: '不要空着噢', trigger: 'blur' },
-          { min: 1, max: 20, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+          { min: 1, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
         ],
         password: [
           { min: 1, max: 10, message: '长度在 3 到 5 个字符', trigger: 'blur' }
@@ -82,6 +95,19 @@ export default {
         Ucode: [{ required: true, message: '不要空着噢', trigger: 'blur' }]
       },
       imageURL: ''
+    }
+  },
+  watch: {
+    remember: function (val) {
+      if (val) {
+        // 保存密码
+        window.localStorage.setItem('password', this.loginForm.password)
+        window.localStorage.setItem('userID', this.loginForm.userID)
+        console.log('记住')
+      } else {
+        window.localStorage.setItem('password', null)
+        window.localStorage.setItem('userID', null)
+      }
     }
   },
   methods: {
@@ -146,13 +172,25 @@ export default {
 .Login_container {
   height: 100%;
   width: 100%;
-  background-color: #feb6b9;
+  // background-image: url('../../assets/img/cover9.jpg');
+  // background-image: linear-gradient(40deg, #c1d730, #dae47d);
+  background-image: url('../../assets/img/bg02.png');
 }
+
+.log_box {
+  height: 500px;
+  width: 500px;
+  background-image: url('../../assets/img/xcd.png');
+  background-size: 500px;
+  position: relative;
+  transform: translate(30%, 50%);
+}
+
 /* 登录和蓝色框 */
 .login {
   position: absolute;
-  top: 10%;
-  left: 40%;
+  top: 20%;
+  left: 70%;
   text-align: center;
 }
 /* 登录框 */
@@ -161,24 +199,29 @@ export default {
   font-family: 微软雅黑;
   height: 45px;
   text-align: center;
+  color: white;
 }
 /* 下面那个蓝色框 */
 .login-form {
   border-radius: 20px;
   height: 50%;
-  background-color: #c4d0d1;
+  background-color: #c4d0d1cc;
   box-shadow: 0 5px 10px rgba(56, 56, 56, 0.397);
   padding: 25px;
 }
 /* 蓝色框里面的字体 */
 .data {
   font-size: 14px;
-  color: #fff;
+  color: rgb(255, 255, 255);
   text-align: left;
   font-family: 宋体;
 }
 .btns {
   border-radius: 10px;
+}
+
+/deep/ .el-form-item__error {
+  color: #ff0000;
 }
 
 .btns /deep/ .el-button {

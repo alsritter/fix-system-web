@@ -1,16 +1,21 @@
 module.exports = {
-  // 这个文档的配置参考官网：https://cli.vuejs.org/zh/config
-  // 以及：https://cloud.tencent.com/developer/article/1408217
-  css: {
-    loaderOptions: {
-      css: {
-        // 这里的选项会传递给 css-loader
-        // 给 less-loader 传递 Less.js 相关选项
-        // less: {
-        //   test: /\.less$/,
-        //   loader: 'style-loader!css-loader!less-loader'
-        // }
-      }
-    }
+  publicPath: './',
+  outputDir: 'dist',
+  lintOnSave: true,
+  runtimeCompiler: true, // 关键点在这
+  // 调整内部的 webpack 配置。
+  // 查阅 https://github.com/vuejs/vue-doc-zh-cn/vue-cli/webpack.md
+  chainWebpack: () => { },
+  configureWebpack: () => { },
+  // 配置 webpack-dev-server 行为。
+  devServer: {
+    open: process.platform === 'darwin',
+    host: '0.0.0.0',
+    port: 8080,
+    https: false,
+    hotOnly: false,
+    // 查阅 https://github.com/vuejs/vue-doc-zh-cn/vue-cli/cli-service.md#配置代理
+    proxy: null, // string | Object
+    before: app => { }
   }
 }
